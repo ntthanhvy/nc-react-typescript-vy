@@ -14,6 +14,8 @@ import { Header } from '../components/Header'
 import { Footer } from '../components/Footer'
 import { Card } from '../components/ui-kits/Card'
 
+import { baseUrl} from '../common/urlHelper';
+
 export const HomeContainer = styled.div``
 
 export const StyledHomeBody = styled.div`
@@ -72,7 +74,7 @@ function Home({ products }) {
 }
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const res = await fetch(`Ô{baseUrl}/product`)
+  const res = await fetch(`${baseUrl}/product`)
   const data = await res.json()
 
   return { props: { products: data.data } }
