@@ -16,6 +16,39 @@ export const StyledHeader = styled.div`
   width: 100%;
   z-index: 200;
   grid-template-columns: 100px auto 100px;
+
+  & .leftHeader {
+    margin-left: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+
+    & .cartHolder {
+      position: relative;
+      // width: 50px;
+      // height: 70px;
+      margin-right: 15px;
+      display: flex;
+      justifi-content: center;
+      align-items: center;
+
+      & .bagde {
+        width: 15px;
+        height: 15px;
+        position: absolute;
+        top: -5px;
+        right: -8px;
+        background-color: red;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 12px;
+        border-radius: 50%;
+      }
+    }
+  }
 `
 
 export const StyledHeaderLogo = styled.div``

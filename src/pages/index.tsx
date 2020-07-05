@@ -1,5 +1,7 @@
 import React from 'react'
+import _ from 'lodash'
 import Head from 'next/head'
+import Router from 'next/router'
 import { GetStaticProps } from 'next'
 import styled from 'styled-components'
 
@@ -14,7 +16,7 @@ import { Header } from '../components/Header'
 import { Footer } from '../components/Footer'
 import { Card } from '../components/ui-kits/Card'
 
-import { baseUrl} from '../common/urlHelper';
+import { baseUrl } from '../common/urlHelper'
 
 export const HomeContainer = styled.div``
 
@@ -25,6 +27,17 @@ export const StyledHomeBody = styled.div`
   grid-template-columns: repeat(auto-fill, 220px);
   grid-gap: 10px;
 `
+
+interface IProduct {
+  id: string
+  name: string
+  image: string
+}
+
+interface ICart {
+  id: string
+  count: number
+}
 
 function Home({ products }) {
   // const { loading, error, data } = useQuery(GET_PRODUCTS, {
@@ -43,23 +56,39 @@ function Home({ products }) {
   //   return <p>Not found</p>
   // }
 
+  let [cart, setCart] = React.useState<ICart[]>([])
+
   return (
     <>
       <Head>
-        <title>STRANGS Template</title>
+        <title>Home</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Header />
+      <Header cartCount={cart.length} />
       <Layout>
         <StyledHomeBody>
-          {products.map((data) => (
+          {products.map((data: IProduct) => (
             <Card
               key={data.id}
               imageURL={data.image}
               buttonGroups={
                 <>
-                  <Button>View</Button>
-                  <Button>Add to Cart</Button>
+                  <Button onClick={() => Router.push(`/product/${data.id}`)}>View</Button>
+                  <Button
+                    onClick={() => {
+                      if (_.find(cart, ['id', data.id])) {
+                        let prod = _.find(cart, ['id', data.id])
+                        console.log(prod)
+                        prod.count += 1
+                        setCart(cart)
+                      } else {
+                        setCart([...cart, { id: data.id, count: 1 }])
+                      }
+                      console.log(cart)
+                    }}
+                  >
+                    Add to Cart
+                  </Button>
                 </>
               }
             >
