@@ -8,10 +8,6 @@ import styled from 'styled-components'
 import Layout from '../components/Layout/Layout'
 import Button from '../components/ui-kits/Button/Button'
 
-// import withApollo from '../utils/withApollo'
-// import { useQuery } from '@apollo/react-hooks'
-// import { GET_PRODUCTS } from '../graphql/product/product.query'
-
 import { Header } from '../components/Header'
 import { Footer } from '../components/Footer'
 import { Card } from '../components/ui-kits/Card'

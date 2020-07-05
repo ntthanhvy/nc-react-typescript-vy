@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { useRouter } from 'next/router'
 import { GetStaticPaths, GetStaticProps } from 'next'
 
@@ -8,7 +8,16 @@ import { Text, Button } from '../../components/ui-kits'
 import { Header } from '../../components/Header'
 import { Layout } from '../../components/Layout'
 
-import { StyledProduct } from './Product.style'
+import styled from 'styled-components'
+
+export const StyledProduct = styled.div`
+  width: 80%;
+  // height: 70vh;
+  border: 1px solid #e2e2e2;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+`
 
 interface IProduct {
   id: string
@@ -20,18 +29,28 @@ interface IProduct {
 
 interface IProductProps {
   product: IProduct
+  detail: HTMLElement
+}
+
+interface IDetail {
+  detail: string
+}
+
+const Detail: React.FC<IDetail> = ({ detail }) => {
+  return React.createElement('div', null, detail)
 }
 
 const Product: React.FC<IProductProps> = ({ product }) => {
   const router = useRouter()
 
-  let domParser: DOMParser = new DOMParser();
-  let content = domParser.parseFromString(product.description, 'text/html')
+  const createMarkup = (htmlString) => ({ __html: htmlString })
 
   return (
     <>
       <Header />
-      <Layout>{content}</Layout>
+      <Layout>
+        {product && <div dangerouslySetInnerHTML={createMarkup(product.description)} />}
+      </Layout>
     </>
   )
 }

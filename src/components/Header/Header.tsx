@@ -14,7 +14,6 @@ interface IHeader {
 }
 
 const Header: React.FC<IHeader> = (props) => {
-  console.log(props.cartCount)
   return (
     <StyledHeader>
       <StyledHeaderLogo>LOGO</StyledHeaderLogo>
