@@ -29,7 +29,6 @@ interface IProduct {
 
 interface IProductProps {
   product: IProduct
-  detail: HTMLElement
 }
 
 interface IDetail {
