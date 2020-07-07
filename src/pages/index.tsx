@@ -1,6 +1,5 @@
 import React from 'react'
 import _ from 'lodash'
-import Head from 'next/head'
 import Router from 'next/router'
 import { GetStaticProps } from 'next'
 import styled from 'styled-components'
@@ -8,7 +7,6 @@ import styled from 'styled-components'
 import Layout from '../components/Layout/Layout'
 import Button from '../components/ui-kits/Button/Button'
 
-import { Header } from '../components/Header'
 import { Footer } from '../components/Footer'
 import { Card } from '../components/ui-kits/Card'
 
@@ -30,37 +28,9 @@ interface IProduct {
   image: string
 }
 
-interface ICart {
-  id: string
-  count: number
-}
-
-function Home({ products }) {
-  // const { loading, error, data } = useQuery(GET_PRODUCTS, {
-  //   variables: {
-  //     input: {
-  //       page: 1,
-  //       keyword: 'Samsung',
-  //     },
-  //   },
-  // })
-  // if (error) return <h1>Error</h1>
-  // if (loading) return <h1>Loading...</h1>
-
-  // const products = data?.getAllProduct?.data
-  // if (!products || !products.length) {
-  //   return <p>Not found</p>
-  // }
-
-  let [cart, setCart] = React.useState<ICart[]>([])
-
+function Home({ products, cart, setCart }) {
   return (
     <>
-      <Head>
-        <title>Home</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <Header cartCount={cart.length} />
       <Layout>
         <StyledHomeBody>
           {products.map((data: IProduct) => (

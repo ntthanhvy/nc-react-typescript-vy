@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
 import { useRouter } from 'next/router'
 import { GetStaticPaths, GetStaticProps } from 'next'
+import _ from 'lodash'
 
 import { baseUrl } from '../../common/urlHelper'
 
@@ -27,8 +28,14 @@ interface IProduct {
   price: number
 }
 
+interface ICart {
+  id: string
+  count: number
+}
+
 interface IProductProps {
   product: IProduct
+  cart: ICart
 }
 
 interface IDetail {
@@ -39,18 +46,20 @@ const Detail: React.FC<IDetail> = ({ detail }) => {
   return React.createElement('div', null, detail)
 }
 
-const Product: React.FC<IProductProps> = ({ product }) => {
-  const router = useRouter()
-
+const Product: React.FC<IProductProps> = ({ product, cart }) => {
   const createMarkup = (htmlString) => ({ __html: htmlString })
 
   return (
-    <>
-      <Header />
-      <Layout>
-        {product && <div dangerouslySetInnerHTML={createMarkup(product.description)} />}
-      </Layout>
-    </>
+    <Layout>
+      {product ? (
+        <div dangerouslySetInnerHTML={createMarkup(product.description)}>
+          {_.find(cart, ['id', product.id]) && <h3>Added to cart</h3>}
+        </div>
+      ) : (
+        <h2>Product not found</h2>
+      )}
+      
+    </Layout>
   )
 }
 
