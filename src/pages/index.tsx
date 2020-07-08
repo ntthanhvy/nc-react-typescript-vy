@@ -58,7 +58,7 @@ function Home({ products, cart, setCart }) {
                 </>
               }
             >
-              {data.name}
+              <span style={{ fontSize: 14}}>{data.name}</span>
             </Card>
           ))}
         </StyledHomeBody>

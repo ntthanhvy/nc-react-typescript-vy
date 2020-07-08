@@ -1,24 +1,12 @@
-import React, { ReactNode } from 'react'
-import { useRouter } from 'next/router'
+import React from 'react'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import _ from 'lodash'
 
 import { baseUrl } from '../../common/urlHelper'
-
-import { Text, Button } from '../../components/ui-kits'
-import { Header } from '../../components/Header'
 import { Layout } from '../../components/Layout'
+import { Text } from '../../components/ui-kits'
 
-import styled from 'styled-components'
-
-export const StyledProduct = styled.div`
-  width: 80%;
-  // height: 70vh;
-  border: 1px solid #e2e2e2;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-`
+import { StyledProduct } from './Product.styled'
 
 interface IProduct {
   id: string
@@ -39,11 +27,29 @@ interface IProductProps {
 }
 
 interface IDetail {
-  detail: string
+  id: string
+  image: string
+  name: string
+  price: number
+  shortDescription: string
 }
 
-const Detail: React.FC<IDetail> = ({ detail }) => {
-  return React.createElement('div', null, detail)
+const Detail: React.FC<IDetail> = ({ image, name, id, children, price, shortDescription }) => {
+  return (
+    <StyledProduct key={id}>
+      <div className="product-info">
+        <div className="product-img">
+          <img src={image} alt={`${id}-img`} />
+        </div>
+        <div className="product">
+          <span className="product-text">{name}</span>
+          <span className="product-price">{price} VND</span>
+          <span className="short-description">{shortDescription}</span>
+        </div>
+      </div>
+      {children}
+    </StyledProduct>
+  )
 }
 
 const Product: React.FC<IProductProps> = ({ product, cart }) => {
@@ -52,13 +58,15 @@ const Product: React.FC<IProductProps> = ({ product, cart }) => {
   return (
     <Layout>
       {product ? (
-        <div dangerouslySetInnerHTML={createMarkup(product.description)}>
+        <>
+          <Detail {...product}>
+            <div dangerouslySetInnerHTML={createMarkup(product.description)} />
+          </Detail>
           {_.find(cart, ['id', product.id]) && <h3>Added to cart</h3>}
-        </div>
+        </>
       ) : (
         <h2>Product not found</h2>
       )}
-      
     </Layout>
   )
 }
