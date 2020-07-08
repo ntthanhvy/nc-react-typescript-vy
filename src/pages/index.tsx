@@ -44,13 +44,11 @@ function Home({ products, cart, setCart }) {
                     onClick={() => {
                       if (_.find(cart, ['id', data.id])) {
                         let prod = _.find(cart, ['id', data.id])
-                        console.log(prod)
                         prod.count += 1
                         setCart(cart)
                       } else {
                         setCart([...cart, { id: data.id, count: 1 }])
                       }
-                      console.log(cart)
                     }}
                   >
                     Add to Cart

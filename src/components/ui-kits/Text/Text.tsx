@@ -4,7 +4,7 @@ import { StyledText } from './Text.styled'
 interface TextProps {
   children: string
   role?: string
-  className: string
+  className?: string
 }
 
 const Text: React.FC<TextProps> = (props) => {

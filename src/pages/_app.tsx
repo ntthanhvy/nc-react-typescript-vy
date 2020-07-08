@@ -20,7 +20,6 @@ interface ICart {
 const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
   const [cart, setCart] = React.useState<ICart[]>([])
 
-  console.log('app', pageProps)
   return (
     <StyledWrapper>
       <Head>

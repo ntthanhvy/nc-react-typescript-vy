@@ -6,7 +6,7 @@ import { baseUrl } from '../../common/urlHelper'
 import { Layout } from '../../components/Layout'
 import { Text } from '../../components/ui-kits'
 
-import { StyledProduct } from './Product.styled'
+import StyledProduct from './Product.styled'
 
 interface IProduct {
   id: string
@@ -14,6 +14,7 @@ interface IProduct {
   name: string
   description: string
   price: number
+  shortDescription: string
 }
 
 interface ICart {
@@ -26,15 +27,7 @@ interface IProductProps {
   cart: ICart
 }
 
-interface IDetail {
-  id: string
-  image: string
-  name: string
-  price: number
-  shortDescription: string
-}
-
-const Detail: React.FC<IDetail> = ({ image, name, id, children, price, shortDescription }) => {
+const Detail: React.FC<IProduct> = ({ image, name, id, children, price, shortDescription }) => {
   return (
     <StyledProduct key={id}>
       <div className="product-info">
