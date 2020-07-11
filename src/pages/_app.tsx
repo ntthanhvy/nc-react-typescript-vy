@@ -12,7 +12,7 @@ const StyledWrapper = styled.div`
   font-size: calc(18 / 1440 * 100vw);
 `
 
-interface ICart {
+export interface ICart {
   id: string
   count: number
 }

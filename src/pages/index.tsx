@@ -11,6 +11,7 @@ import { Footer } from '../components/Footer'
 import { Card } from '../components/ui-kits/Card'
 
 import { baseUrl } from '../common/urlHelper'
+import { ICart } from './_app';
 
 export const HomeContainer = styled.div``
 
@@ -28,7 +29,23 @@ interface IProduct {
   image: string
 }
 
-function Home({ products, cart, setCart }) {
+interface IHome {
+  products: IProduct[]
+  cart: ICart[]
+  setCart: (cart: ICart[]) => void
+}
+
+const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
+  const addToCart = (id) => {
+    if (_.find(cart, ['id', id])) {
+      let prod = _.find(cart, ['id', id])
+      prod.count += 1
+      setCart(cart)
+    } else {
+      setCart([...cart, { id: id, count: 1 }])
+    }
+  }
+
   return (
     <>
       <Layout>
@@ -41,15 +58,7 @@ function Home({ products, cart, setCart }) {
                 <>
                   <Button onClick={() => Router.push(`/product/${data.id}`)}>View</Button>
                   <Button
-                    onClick={() => {
-                      if (_.find(cart, ['id', data.id])) {
-                        let prod = _.find(cart, ['id', data.id])
-                        prod.count += 1
-                        setCart(cart)
-                      } else {
-                        setCart([...cart, { id: data.id, count: 1 }])
-                      }
-                    }}
+                    onClick={() => addToCart(data.id)}
                   >
                     Add to Cart
                   </Button>
