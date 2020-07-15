@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-const StyledProduct = styled.div`
+export const StyledProduct = styled.div`
   width: 90%;
   margin: auto;
   border: 1px solid #e2e2e2;
@@ -63,4 +63,4 @@ const StyledProduct = styled.div`
   }
 `
 
-export default StyledProduct;
+// export default StyledProduct;

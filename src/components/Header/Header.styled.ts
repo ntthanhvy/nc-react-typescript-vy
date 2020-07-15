@@ -1,62 +1,102 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import Button from '../ui-kits/Button/Button'
 
 export const StyledHeader = styled.div`
+  display: flex;
+  flex-direction: row;
   align-items: center;
-  background: #fff;
-  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 2px 6px 2px rgba(60, 64, 67, 0.15);
-  color: #202124;
-  contain: layout;
-  display: grid;
-  font-size: 14px;
-  height: 64px;
-  padding: 0 24px;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 200;
-  grid-template-columns: 100px auto 100px;
+  justify-content: space-between;
+  background-color: ${(props) => props.theme.colors.primary};
+  color: ${(props) => props.theme.colors.light};
+  height: 60px;
 
-  & .leftHeader {
-    margin-left: auto;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-around;
-
-    & .cartHolder {
-      position: relative;
-      // width: 50px;
-      // height: 70px;
-      margin-right: 15px;
-      display: flex;
-      justifi-content: center;
-      align-items: center;
-
-      & .bagde {
-        width: 15px;
-        height: 15px;
-        position: absolute;
-        top: -5px;
-        right: -8px;
-        background-color: red;
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        color: white;
-        font-size: 12px;
-        border-radius: 50%;
-      }
-    }
+  // mobile view
+  @media only screen and (max-width: 768px) {
+    padding: 0 15px;
+    justify-content: center;
   }
 `
 
-export const StyledHeaderLogo = styled.div``
-export const StyledHeaderMenu = styled.ul`
-  display: grid;
-  align-content: space-around;
-  grid-template-columns: inherit;
-  list-style: none;
+export const StyledHeaderLogo = styled.div`
+  font-size: 35px;
+  font-weight: 700;
+
+  &:hover {
+    cursor: pointer;
+  }
 `
-export const StyledHeaderMenuItem = styled.li``
-export const StyledHeaderButton = styled(Button)``
+
+export const MenuIcon = styled.div`
+  position: absolute;
+  right: 15px;
+  display: none;
+
+  @media only screen and (max-width: 768px) {
+    display: block;
+    transform: ${(props) => props.showMenu && 'scale(-1, 1)'};
+    z-index: 100;
+  }
+`
+
+export const StyledHeaderMenu = styled.ul`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  list-style: none;
+  height: 100%;
+
+  @media only screen and (max-width: 768px) {
+    width: 322px;
+    display: ${(props) => (props.showMenu ? 'flex' : 'none')};
+    height: 100vh;
+    flex-direction: column;
+    justify-content: flex-start;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transition: 0.3s;
+    background-color: ${(props) => props.theme.colors.blue2};
+    z-index: 10;
+    padding-top: 60px;
+    padding-bottom: 30px;
+  }
+`
+
+export const StyledHeaderMenuItem = styled.li`
+  & a {
+    color: ${(props) => props.theme.colors.light};
+    font-size: ${(props) => (props.signIn ? '18px' : '25px')};
+    font-weight: ${(props) => (props.signIn ? 'normal' : 'bold')};
+    text-decoration: none;
+    text-transform: ${(props) => (props.signIn ? 'none' : 'uppercase')};
+    margin-left: 10px;
+    text-align: ${(props) => props.signIn && 'center'};
+  }
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media only screen and (max-width: 768px) {
+    width: 80%;
+    height: ${(props) => (props.signIn ? '35px' : '60px')};
+    border-bottom: 2px solid ${(props) => props.theme.colors.light};
+    justify-content: ${(props) => (props.signIn ? 'center' : 'flex-start')};
+    margin-bottom: 12px;
+    margin-top: ${(props) => props.signIn && 'auto'};
+    position: ${(props) => props.signIn && 'relative'};
+
+    .userIcon {
+      color: ${(props) => props.theme.colors.light};
+      position: absolute;
+      right: 0;
+    }
+
+    &:hover {
+      width: 85%;
+      opacity: 90%;
+      cursor: pointer;
+    }
+  }
+`

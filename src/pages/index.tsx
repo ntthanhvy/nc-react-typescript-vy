@@ -8,10 +8,10 @@ import Layout from '../components/Layout/Layout'
 import Button from '../components/ui-kits/Button/Button'
 
 import { Footer } from '../components/Footer'
-import { Card } from '../components/ui-kits/Card'
+import { Card } from '../components/ui-kits'
 
 import { baseUrl } from '../common/urlHelper'
-import { ICart } from './_app';
+import { ICart } from './_app'
 
 export const HomeContainer = styled.div``
 
@@ -36,6 +36,8 @@ interface IHome {
 }
 
 const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
+  const [currentPage, setPage] = React.useState<number>(1)
+
   const addToCart = (id) => {
     if (_.find(cart, ['id', id])) {
       let prod = _.find(cart, ['id', id])
@@ -44,6 +46,11 @@ const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
     } else {
       setCart([...cart, { id: id, count: 1 }])
     }
+  }
+
+  const onPageChange = (e) => {
+    setPage(e.selected)
+    console.log(currentPage)
   }
 
   return (
@@ -57,15 +64,11 @@ const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
               buttonGroups={
                 <>
                   <Button onClick={() => Router.push(`/product/${data.id}`)}>View</Button>
-                  <Button
-                    onClick={() => addToCart(data.id)}
-                  >
-                    Add to Cart
-                  </Button>
+                  <Button onClick={() => addToCart(data.id)}>Add to Cart</Button>
                 </>
               }
             >
-              <span style={{ fontSize: 14}}>{data.name}</span>
+              <span style={{ fontSize: 14 }}>{data.name}</span>
             </Card>
           ))}
         </StyledHomeBody>

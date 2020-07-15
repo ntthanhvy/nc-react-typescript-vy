@@ -4,9 +4,9 @@ import _ from 'lodash'
 
 import { baseUrl } from '../../common/urlHelper'
 import { Layout } from '../../components/Layout'
-import { Text } from '../../components/ui-kits'
+// import { Text } from '../../components/ui-kits'
 
-import StyledProduct from './Product.styled'
+import { StyledProduct } from '../../components/elements/Product.styled'
 
 interface IProduct {
   id: string

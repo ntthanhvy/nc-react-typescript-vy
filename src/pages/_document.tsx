@@ -44,12 +44,7 @@ class MyDocument extends Document {
       <Html>
         <Head>
           <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <meta charSet="utf-8" />
-
-          <link
-            href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
-            rel="stylesheet"
-          />
+         
 
           <style type="text/css">{globalStyles}</style>
         </Head>
