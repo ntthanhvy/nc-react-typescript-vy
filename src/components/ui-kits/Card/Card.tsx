@@ -20,7 +20,7 @@ interface CardProps {
   blockView?: boolean
   listView?: boolean
   buttonAdd?: React.ReactNode
-  product_name: string
+  product_name?: string
 }
 
 const Card: React.FC<CardProps> = (props) => {
