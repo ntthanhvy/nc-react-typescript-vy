@@ -7,6 +7,7 @@ export default  {
         blue3: "#2A9DF4",
         
         light: "#F0F8FD",
+        dark: "#707070",
         
         red1: "#F4592A",
         red2: "#F4302A",

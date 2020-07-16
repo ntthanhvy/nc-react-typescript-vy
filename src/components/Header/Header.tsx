@@ -24,11 +24,9 @@ interface IHeader {
 const Header: React.FC<IHeader> = (props) => {
   const [showMenu, setShowMenu] = React.useState<Boolean>(false)
 
-  const returnHome = () => Router.push("/")
-
   return (
     <StyledHeader>
-      <StyledHeaderLogo onClick={() => Router.push("/")}>SWA</StyledHeaderLogo>
+      <StyledHeaderLogo onClick={() => Router.push('/')}>SWA</StyledHeaderLogo>
       <MenuIcon onClick={() => setShowMenu(!showMenu)} showMenu={showMenu}>
         <img src={hamburgerIcon} />
       </MenuIcon>

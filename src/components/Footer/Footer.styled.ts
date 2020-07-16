@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 export const StyledFooter = styled.div`
   width: 100%;
+  height: 
   grid-template-columns: auto auto;
   grid-gap: 30px;
   display: grid;

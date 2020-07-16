@@ -7,11 +7,10 @@ export const StyledButton = styled.button`
   white-space: nowrap;
   vertical-align: middle;
   user-select: none;
-  border: 1px solid transparent;
+  border: 3px solid transparent;
   padding: 0.375rem 0.75rem;
   font-size: 1rem;
   line-height: 1.5;
-  border-radius: 0.25rem;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   letter-spacing: normal;
@@ -19,8 +18,19 @@ export const StyledButton = styled.button`
   text-transform: none;
   text-indent: 0px;
   text-shadow: none;
+  background-color: ${(props) => props.theme.colors.blue1};
+  border-radius: 100px;
+  width: 160px;
+  color: ${(props) => props.theme.colors.light};
+  box-sizing: border-box;
 
   &:not(:disabled):not(.disabled) {
     cursor: pointer;
+  }
+
+  &:hover {
+    background-color: #ffffff80;
+    border: 3px solid ${(props) => props.theme.colors.blue1};
+    color: ${(props) => props.theme.colors.blue1};
   }
 `
