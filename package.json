@@ -45,6 +45,7 @@
     "react-paginate": "^6.3.2",
     "react-scripts": "3.4.1",
     "styled-components": "^5.1.1",
+    "styled-css-grid": "^1.2.1",
     "ts-jest": "^26.1.1",
     "ts-loader": "^7.0.5",
     "typescript": "^3.9.6"

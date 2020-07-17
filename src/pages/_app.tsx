@@ -32,6 +32,16 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
             rel="stylesheet"
           ></link>
           <meta charSet="utf-8" />
+          <link rel="manifest" href="/manifest.json" />
+          <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+            rel="stylesheet"
+          />
+          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+          <meta
+            name="viewport"
+            content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
+          />
         </Head>
         <Header cartCount={cart.length} />
         <Component {...pageProps} cart={cart} setCart={setCart} />

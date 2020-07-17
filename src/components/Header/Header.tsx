@@ -28,7 +28,7 @@ const Header: React.FC<IHeader> = (props) => {
     <StyledHeader>
       <StyledHeaderLogo onClick={() => Router.push('/')}>SWA</StyledHeaderLogo>
       <MenuIcon onClick={() => setShowMenu(!showMenu)} showMenu={showMenu}>
-        <img src={hamburgerIcon} />
+        <img src="images/Hamburger.svg" />
       </MenuIcon>
       <StyledHeaderMenu showMenu={showMenu}>
         <StyledHeaderMenuItem>
@@ -47,8 +47,10 @@ const Header: React.FC<IHeader> = (props) => {
           </Link>
         </StyledHeaderMenuItem>
         <StyledHeaderMenuItem signIn>
-          <a>Sign in</a>
-          <FaUser fontSize={18} className="userIcon" />
+          <a>
+            Sign in
+            <FaUser className="userIcon" />
+          </a>
         </StyledHeaderMenuItem>
       </StyledHeaderMenu>
     </StyledHeader>

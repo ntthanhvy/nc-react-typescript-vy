@@ -1,30 +1,29 @@
 import styled, { css } from 'styled-components'
+import { Cell } from 'styled-css-grid'
 
-export const StyledCard = styled.div`
+export const StyledCard = styled(Cell)`
   position: relative;
-  min-height: 160px;
+  // max-height: calc(250 / 1440 * 100vw);
   word-wrap: break-word;
-  margin: 15px;
-  position: relative;
   overflow: hidden;
+  width: 100%;
 
   ${(props) =>
     props.blockView &&
     css`
-      min-width: 160px;
-      width: 45%;
-      padding: 10px;
-      border: 1px solid ${(props) => props.theme.colors.blue1};
-      border-radius: 10px;
+      height: 42vw;
       position: relative;
 
       &:hover {
         cursor: pointer;
 
         & .overlay {
-          // height: 100%;
           display: flex;
         }
+      }
+
+      @media only screen and (min-width: 768px) {
+        height: 130px;
       }
     `}
 
@@ -32,7 +31,6 @@ export const StyledCard = styled.div`
     props.listView &&
     css`
       display: flex;
-      width: 85%;
       height: 200px;
       flex-direction: row;
       justify-content: flex-start;
@@ -45,39 +43,31 @@ export const StyledCardImage = styled.div`
   justify-content: center;
   align-items: center;
   height: 100%;
+  min-width: 10em;
+  width: 100%;
+  border: 1px solid ${(props) => props.theme.colors.blue1};
+  border-radius: calc(10 / 1440 * 100vw);
+  overflow: hidden;
 
   ${(props) =>
     props.listView &&
     css`
-      width: 200px;
-      height: 100%;
-      border: 1px solid ${(props) => props.theme.colors.blue1};
-      border-radius: 10px;
-      overflow: hidden;
       padding: 10px;
       margin-right: 20px;
+      width: calc(250 / 1440 * 100vw);
+      height: calc(250 / 1440 * 100vw);
     `}
-
-  & img {
-    ${(props) =>
-      props.blockView &&
-      css`
-        width: 100%;
-        height: 100%;
-        border-radius: 10px;
-      `}
-
-    ${(props) =>
-      props.listView &&
-      css`
-        height: 100%;
-        border-radius: 10px;
-      `}
-  }
 
   &:hover {
     cursor: pointer;
   }
+`
+
+export const StyledImg = styled.img`
+  // width: 120%;
+  height: 100%;
+  border-radius: calc(10 / 1440 * 100vw);
+  cursor: pointer;
 `
 
 export const StyledCardBody = styled.div`
@@ -89,12 +79,20 @@ export const StyledCardBody = styled.div`
   .product_name,
   .product_price {
     font-weight: 700;
-    font-size: 20px;
+    font-size: calc(26 / 1440 * 100vw);
+
+    @media only screen and (max-width: 768px) {
+      font-size: 18px;
+    }
+
+    @media only screen and (max-width: 414px) {
+      font-size: calc(26 / 1440 * 100vw);
+    }
   }
 
   .product_name {
     color: ${(props) => props.theme.colors.blue1};
-    margin-bottom: 12px;
+    margin-bottom: calc(12 / 1440 * 100vw);
 
     &:hover {
       cursor: pointer;
@@ -106,8 +104,6 @@ export const StyledCardBody = styled.div`
     color: ${(props) => props.theme.colors.red1};
   }
 `
-
-export const StyledCardButton = styled.div``
 
 export const CardOverlay = styled.div`
   width: 100%;
@@ -124,8 +120,7 @@ export const CardOverlay = styled.div`
   padding: 10px;
 
   & span {
-    // height: 56px;
-    font-size: 14px;
+    font-size: calc(18 / 1440 * 100vw);
     color: ${(props) => props.theme.colors.light};
     padding: 20px;
   }

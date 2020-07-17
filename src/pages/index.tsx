@@ -4,10 +4,15 @@ import Router from 'next/router'
 import { GetStaticProps } from 'next'
 
 import { Layout } from '../components/Layout'
-import { Button } from '../components/ui-kits'
+// import { Button } from '../components/ui-kits'
 import { MdViewList, MdViewModule } from 'react-icons/md'
 
-import { SelectView, SelectOpt, ProductContainer } from '../components/elements/ProductList.styled'
+import {
+  SelectView,
+  SelectOpt,
+  ProductContainer,
+  CusBtn,
+} from '../components/elements/ProductList.styled'
 
 import { Footer } from '../components/Footer'
 import { Card } from '../components/ui-kits'
@@ -18,7 +23,7 @@ import { ICart } from './_app'
 interface IProduct {
   id: string
   name: string
-  image: string
+  imgUrl: string
   price: number
   shortDescription: string
 }
@@ -43,11 +48,16 @@ const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
     }
   }
 
+  React.useEffect(() => {
+    console.log(products)
+  })
+
   return (
     <>
       <Layout>
-        <SelectView>
+        <SelectView columns={2}>
           <SelectOpt
+            // width={1}
             onClick={() => {
               setBlockView(true)
               setListView(false)
@@ -66,22 +76,28 @@ const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
             <MdViewList fontSize={32} />
           </SelectOpt>
         </SelectView>
-        <ProductContainer blockView={blockView} listView={listView}>
+        <ProductContainer
+          blockView={blockView}
+          listView={listView}
+          // minRowHeight="20vw"
+        >
           {products.map((data: IProduct) => (
             <Card
               key={data.id}
-              imageURL={data.image}
+              imageURL={data.imgUrl}
               buttonGroups={
                 <>
-                  <Button onClick={() => Router.push(`/product/${data.id}`)}>View</Button>
-                  <Button onClick={() => addToCart(data.id)}>Add to Cart</Button>
+                  <CusBtn onClick={() => Router.push(`/product/${data.id}`)}>View</CusBtn>
+                  <CusBtn onClick={() => addToCart(data.id)}>Add to Cart</CusBtn>
                 </>
               }
               blockView={blockView}
               listView={listView}
               product_name={data.name}
             >
-              <span className="product_name" onClick={() => Router.push(`/product/${data.id}`)}>{data.name}</span>
+              <span className="product_name" onClick={() => Router.push(`/product/${data.id}`)}>
+                {data.name}
+              </span>
               <span className="product_price">{data.price} VND</span>
               <span>{data.shortDescription}</span>
             </Card>

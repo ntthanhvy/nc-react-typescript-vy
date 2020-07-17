@@ -6,11 +6,9 @@ import {
   StyledCardImage,
   StyledCardBody,
   StyledCardButtonGroup,
-  StyledCardButton,
+  StyledImg,
   CardOverlay,
 } from './Card.styled'
-
-import { Text } from '../Text'
 
 interface CardProps {
   children: React.ReactNode
@@ -24,12 +22,12 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = (props) => {
-  const { blockView, listView, product_name } = props
+  const { blockView, listView } = props
 
   return (
     <StyledCard blockView={blockView} listView={listView}>
       <StyledCardImage blockView={blockView} listView={listView}>
-        <img src={props.imageURL} />
+        <StyledImg src={props.imageURL} />
       </StyledCardImage>
       {props.blockView && (
         <CardOverlay className="overlay">
