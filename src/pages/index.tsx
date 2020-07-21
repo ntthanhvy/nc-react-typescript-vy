@@ -1,7 +1,11 @@
 import React from 'react'
 import _ from 'lodash'
+
+import { useQuery } from '@apollo/client'
+import withApollo from '../utils/withApollo'
+import { GET_PRODUCTS } from '../graphql/product/product.query'
+
 import Router from 'next/router'
-import { GetStaticProps } from 'next'
 
 import { Layout } from '../components/Layout'
 import { Button } from '../components/ui-kits'
@@ -12,13 +16,12 @@ import { SelectView, SelectOpt, ProductContainer } from '../components/elements/
 import { Footer } from '../components/Footer'
 import { Card } from '../components/ui-kits'
 
-import { baseUrl } from '../common/urlHelper'
 import { ICart } from './_app'
 
 interface IProduct {
   id: string
   name: string
-  image: string
+  imgUrl: string
   price: number
   shortDescription: string
 }
@@ -42,6 +45,21 @@ const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
       setCart([...cart, { id: id, count: 1 }])
     }
   }
+
+  const { loading, error, data } = useQuery(GET_PRODUCTS, {
+    variables: {
+      input: {
+        page: 1,
+        keyword: 'Samsung',
+      },
+    },
+  })
+
+  if (loading) return <h1>Loading...</h1>
+  if (error) return <h1>Error</h1>
+
+  console.log(data?.getAllProduct?.data)
+  products = data?.getAllProduct?.data
 
   return (
     <>
@@ -70,7 +88,7 @@ const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
           {products.map((data: IProduct) => (
             <Card
               key={data.id}
-              imageURL={data.image}
+              imageURL={data.imgUrl}
               buttonGroups={
                 <>
                   <Button onClick={() => Router.push(`/product/${data.id}`)}>View</Button>
@@ -81,7 +99,9 @@ const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
               listView={listView}
               product_name={data.name}
             >
-              <span className="product_name" onClick={() => Router.push(`/product/${data.id}`)}>{data.name}</span>
+              <span className="product_name" onClick={() => Router.push(`/product/${data.id}`)}>
+                {data.name}
+              </span>
               <span className="product_price">{data.price} VND</span>
               <span>{data.shortDescription}</span>
             </Card>
@@ -93,12 +113,12 @@ const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
   )
 }
 
-export const getStaticProps: GetStaticProps = async (context) => {
-  const res = await fetch(`${baseUrl}/product`)
-  const data = await res.json()
+// export const getStaticProps: GetStaticProps = async (context) => {
+//   // const res = await fetch(`${baseUrl}/product`)
+//   // const data = await res.json()
 
-  return { props: { products: data.data } }
-}
+//   return { props: { products: [] } }
+// }
 
 // export default withApollo({ ssr: true })(Home)
 export default Home

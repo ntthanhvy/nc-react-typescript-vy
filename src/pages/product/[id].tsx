@@ -1,12 +1,14 @@
 import React from 'react'
 import { GetStaticPaths, GetStaticProps } from 'next'
+import Router, { useRouter } from 'next/router'
 import _ from 'lodash'
 
 import { baseUrl } from '../../common/urlHelper'
 import { Layout } from '../../components/Layout'
-// import { Text } from '../../components/ui-kits'
 
 import { StyledProduct } from '../../components/elements/Product.styled'
+import { useQuery } from '@apollo/client'
+import { GET_PRODUCT } from '../../graphql/product/product.query'
 
 interface IProduct {
   id: string
@@ -47,7 +49,23 @@ const Detail: React.FC<IProduct> = ({ image, name, id, children, price, shortDes
 
 const Product: React.FC<IProductProps> = ({ product, cart }) => {
   const createMarkup = (htmlString) => ({ __html: htmlString })
+  const router = useRouter()
 
+  const { loading, error, data } = useQuery(GET_PRODUCT, {
+    variables: {
+      input: {
+        id: router?.query?.id,
+      },
+    },
+  })
+
+  if (loading) return <h1>Loading...</h1>
+  if (error) return <h1>Error</h1>
+
+  product = data?.getProductDetail?.data
+  console.log(product)
+
+  
   return (
     <Layout>
       {product ? (
@@ -64,23 +82,25 @@ const Product: React.FC<IProductProps> = ({ product, cart }) => {
   )
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const res = await fetch(`${baseUrl}/product`)
-  const data = await res.json()
-  const products = data.data
+// export const getStaticPaths: GetStaticPaths = async () => {
+//   const res = await fetch(`${baseUrl}/product`)
+//   const data = await res.json()
+//   const products = data.data
 
-  const paths = products.map((prod) => `/product/${prod.id}`)
+//   const paths = products.map((prod) => `/product/${prod.id}`)
 
-  return { paths, fallback: true }
-}
+//   return { paths, fallback: true }
+// }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { id } = params
+// export const getStaticProps: GetStaticProps = async ({ params }) => {
+//   // const { id } = params
 
-  const res = await fetch(`${baseUrl}/product/${id}`)
-  const product = await res.json()
+//   // const res = await fetch(`${baseUrl}/product/${id}`)
+//   // const product = await res.json()
 
-  return { props: { product } }
-}
+//   const product = {}
+
+//   return { props: { product } }
+// }
 
 export default Product

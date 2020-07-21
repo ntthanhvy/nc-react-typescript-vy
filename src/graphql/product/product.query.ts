@@ -11,8 +11,25 @@ export const GET_PRODUCTS = gql`
         finalPrice
         promotionPercent
         namePath
-        image
+        imgUrl
       }
     }
   }
+`
+
+export const GET_PRODUCT = gql`
+query GetProduct($input: GetProductInput) {
+  getProductDetail(input: $input) {
+    id
+    name
+    price
+    promotionPercent
+    imgUrl
+    media {
+      image
+      type
+    }
+    description
+  }
+} 
 `
