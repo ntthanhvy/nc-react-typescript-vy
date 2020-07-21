@@ -4,13 +4,22 @@ import _ from 'lodash'
 
 import { baseUrl } from '../../common/urlHelper'
 import { Layout } from '../../components/Layout'
-// import { Text } from '../../components/ui-kits'
 
-import { StyledProduct } from '../../components/elements/Product.styled'
+import {
+  StyledProduct,
+  StyledProductInfo,
+  ProductImagesHolder,
+  ProductImages,
+  ProductImg,
+  ProductDetails,
+  ProductName,
+  ProductPrice,
+  ProductShortDesc,
+} from '../../components/elements/Product/Product.styled'
 
 interface IProduct {
   id: string
-  image: string
+  images: string[]
   name: string
   description: string
   price: number
@@ -27,19 +36,34 @@ interface IProductProps {
   cart: ICart
 }
 
-const Detail: React.FC<IProduct> = ({ image, name, id, children, price, shortDescription }) => {
+const Detail: React.FC<IProduct> = (props) => {
+  const { images, name, id, children, price, shortDescription } = props
+  const [currImg, setCurrImg] = React.useState<string>('')
+
+  const parsePrice = (price) => price.toString().replace(/(\d{3})(?=\d)/g, '$1.')
+
+  React.useEffect(() => {
+    setCurrImg(images[0])
+    console.log(props)
+  })
+
   return (
     <StyledProduct key={id}>
-      <div className="product-info">
-        <div className="product-img">
-          <img src={image} alt={`${id}-img`} />
-        </div>
-        <div className="product">
-          <span className="product-text">{name}</span>
-          <span className="product-price">{price} VND</span>
-          <span className="short-description">{shortDescription}</span>
-        </div>
-      </div>
+      <StyledProductInfo>
+        <ProductImagesHolder>
+          <ProductImg src={currImg} alt={`${id}-img`} />
+          <ProductImages>
+            {images.map((img) => (
+              <ProductImg small src={img} alt={`${id}-img`} />
+            ))}
+          </ProductImages>
+        </ProductImagesHolder>
+        <ProductDetails>
+          <ProductName>{name}</ProductName>
+          <ProductPrice>{parsePrice(price)} VND</ProductPrice>
+          <ProductShortDesc>{shortDescription}</ProductShortDesc>
+        </ProductDetails>
+      </StyledProductInfo>
       {children}
     </StyledProduct>
   )

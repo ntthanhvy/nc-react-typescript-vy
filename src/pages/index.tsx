@@ -4,18 +4,19 @@ import Router from 'next/router'
 import { GetStaticProps } from 'next'
 
 import { Layout } from '../components/Layout'
-// import { Button } from '../components/ui-kits'
-import { MdViewList, MdViewModule } from 'react-icons/md'
+import { MdViewList, MdViewModule, MdSearch } from 'react-icons/md'
 
 import {
   SelectView,
   SelectOpt,
+  StyledProductContainer,
   ProductContainer,
   CusBtn,
-} from '../components/elements/ProductList.styled'
+} from '../components/elements/ProductList/ProductList.styled'
+import SearchInput from '../components/elements/ProductList/SeachInput'
 
 import { Footer } from '../components/Footer'
-import { Card } from '../components/ui-kits'
+import { Card, Input } from '../components/ui-kits'
 
 import { baseUrl } from '../common/urlHelper'
 import { ICart } from './_app'
@@ -37,6 +38,7 @@ interface IHome {
 const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
   const [blockView, setBlockView] = React.useState<boolean>(true)
   const [listView, setListView] = React.useState<boolean>(false)
+  const [keyword, setKeyword] = React.useState<string>('')
 
   const addToCart = (id) => {
     if (_.find(cart, ['id', id])) {
@@ -48,16 +50,15 @@ const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
     }
   }
 
-  React.useEffect(() => {
-    console.log(products)
-  })
+  const onSearchChanged = (e) => {
+    setKeyword(e.target.value)
+  }
 
   return (
     <>
       <Layout>
         <SelectView columns={2}>
           <SelectOpt
-            // width={1}
             onClick={() => {
               setBlockView(true)
               setListView(false)
@@ -76,33 +77,48 @@ const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
             <MdViewList fontSize={32} />
           </SelectOpt>
         </SelectView>
-        <ProductContainer
-          blockView={blockView}
-          listView={listView}
-          // minRowHeight="20vw"
-        >
-          {products.map((data: IProduct) => (
-            <Card
-              key={data.id}
-              imageURL={data.imgUrl}
-              buttonGroups={
-                <>
-                  <CusBtn onClick={() => Router.push(`/product/${data.id}`)}>View</CusBtn>
-                  <CusBtn onClick={() => addToCart(data.id)}>Add to Cart</CusBtn>
-                </>
-              }
-              blockView={blockView}
-              listView={listView}
-              product_name={data.name}
-            >
-              <span className="product_name" onClick={() => Router.push(`/product/${data.id}`)}>
-                {data.name}
-              </span>
-              <span className="product_price">{data.price} VND</span>
-              <span>{data.shortDescription}</span>
-            </Card>
-          ))}
-        </ProductContainer>
+        <StyledProductContainer>
+          <SearchInput
+            searchIcon={<MdSearch fontSize={14} />}
+            onFinish={() =>
+              Router.push({
+                pathname: '/',
+                query: { keyword, page: 1 },
+              })
+            }
+          >
+            <Input
+              type="text"
+              placeholder="Search"
+              value={keyword}
+              onChange={onSearchChanged}
+              className="search-input"
+            />
+          </SearchInput>
+          <ProductContainer blockView={blockView} listView={listView}>
+            {products.map((data: IProduct) => (
+              <Card
+                key={data.id}
+                imageURL={data.imgUrl}
+                buttonGroups={
+                  <>
+                    <CusBtn onClick={() => Router.push(`/product/${data.id}`)}>View</CusBtn>
+                    <CusBtn onClick={() => addToCart(data.id)}>Add to Cart</CusBtn>
+                  </>
+                }
+                blockView={blockView}
+                listView={listView}
+                product_name={data.name}
+              >
+                <span className="product_name" onClick={() => Router.push(`/product/${data.id}`)}>
+                  {data.name}
+                </span>
+                <span className="product_price">{data.price} VND</span>
+                <span>{data.shortDescription}</span>
+              </Card>
+            ))}
+          </ProductContainer>
+        </StyledProductContainer>
       </Layout>
       <Footer />
     </>
@@ -110,11 +126,11 @@ const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
 }
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const res = await fetch(`${baseUrl}/product`)
+  let keyword = context.params ? context.params.keyword : ''
+  const res = await fetch(`${baseUrl}/product?keyword=${keyword}&page=1`)
   const data = await res.json()
 
   return { props: { products: data.data } }
 }
 
-// export default withApollo({ ssr: true })(Home)
 export default Home

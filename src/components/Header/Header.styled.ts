@@ -18,44 +18,46 @@ export const StyledHeader = styled.div`
     // justify-content: center;
     grid-template-columns: 1fr;
     align-items: center;
-    height: 35px;
+  }
+
+  &:first-child {
+    justify-items: start;
+
+    @media only screen and (max-width: 768px) {
+      justify-items: center;
+    }
   }
 `
 
 export const StyledHeaderLogo = styled.div`
-  font-size: 30px;
+  font-size: 25px;
   font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  text-align: left;
 
   &:hover {
     cursor: pointer;
-  }
-
-  @media only screen and (max-width: 768px) {
-    font-size: 25px;
   }
 `
 
 export const MenuIcon = styled.div`
   position: absolute;
   right: 5%;
-  top: 1%;
   display: none;
-  height: 2vw;
-  align-self: center;
   place-self: center;
 
   @media only screen and (max-width: 768px) {
-    display: block;
+    display: grid;
+    grid-column: 1/2;
+    grid-row: 1/2;
     transform: ${(props) => props.showMenu && 'scale(-1, 1)'};
     z-index: 100;
-    height: 20px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
   }
 
   & img {
-    height: 100%;
+    height: 20px;
   }
 `
 

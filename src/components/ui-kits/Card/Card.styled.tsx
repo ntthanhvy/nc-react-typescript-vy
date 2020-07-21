@@ -3,7 +3,6 @@ import { Cell } from 'styled-css-grid'
 
 export const StyledCard = styled(Cell)`
   position: relative;
-  // max-height: calc(250 / 1440 * 100vw);
   word-wrap: break-word;
   overflow: hidden;
   width: 100%;
@@ -11,7 +10,8 @@ export const StyledCard = styled(Cell)`
   ${(props) =>
     props.blockView &&
     css`
-      height: 42vw;
+      height: 130px;
+
       position: relative;
 
       &:hover {
@@ -20,10 +20,6 @@ export const StyledCard = styled(Cell)`
         & .overlay {
           display: flex;
         }
-      }
-
-      @media only screen and (min-width: 768px) {
-        height: 130px;
       }
     `}
 

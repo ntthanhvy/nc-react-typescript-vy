@@ -5,7 +5,6 @@ import Router from 'next/router'
 import { IoMdCart } from 'react-icons/io'
 import { FaUser } from 'react-icons/fa'
 
-import { Text } from '../ui-kits/Text'
 import {
   StyledHeader,
   StyledHeaderMenu,
@@ -14,7 +13,6 @@ import {
   MenuIcon,
 } from './Header.styled'
 
-const hamburgerIcon = 'images/Hamburger.svg'
 
 interface IHeader {
   cartCount?: number
@@ -28,7 +26,7 @@ const Header: React.FC<IHeader> = (props) => {
     <StyledHeader>
       <StyledHeaderLogo onClick={() => Router.push('/')}>SWA</StyledHeaderLogo>
       <MenuIcon onClick={() => setShowMenu(!showMenu)} showMenu={showMenu}>
-        <img src="images/Hamburger.svg" />
+        <img src="/images/Hamburger.svg" />
       </MenuIcon>
       <StyledHeaderMenu showMenu={showMenu}>
         <StyledHeaderMenuItem>
