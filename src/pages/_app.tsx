@@ -2,23 +2,17 @@ import React from 'react'
 import { AppProps } from 'next/app'
 import Head from 'next/head'
 
-import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client'
-
 import { Header } from '../components/Header'
 
 import styled, { ThemeProvider } from 'styled-components'
 import theme from '../components/Theme'
-import { grapghQLURL } from '../common/urlHelper'
+import withApollo from '../utils/withApollo'
 
 const StyledWrapper = styled.div`
   font-family: 'Noto Sans JP', sans-serif;
   color: #000000;
   font-size: calc(18 / 1440 * 100vw);
 `
-const client = new ApolloClient({
-  uri: grapghQLURL,
-  cache: new InMemoryCache(),
-})
 
 export interface ICart {
   id: string

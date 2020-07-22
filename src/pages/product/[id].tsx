@@ -18,6 +18,10 @@ import {
   ProductShortDesc,
 } from '../../components/elements/Product/Product.styled'
 
+import withApollo from '../../utils/withApollo'
+import { useQuery } from '@apollo/react-hooks'
+import { GET_PRODUCT } from '../../graphql/product/product.query'
+
 const imgExd = 'https://media3.scdn.vn/'
 
 interface IProduct {
@@ -40,7 +44,7 @@ interface IProductProps {
 }
 
 const Detail: React.FC<IProduct> = (props) => {
-  const { images, name, id, children, price, shortDescription } = props
+  const { images, name, id, children, price } = props
   const [currImg, setCurrImg] = React.useState<string>(images[0])
 
   const parsePrice = (price) => price.toString().replace(/\d(?=(\d{3})+\.)/g, '$&,')
@@ -59,7 +63,7 @@ const Detail: React.FC<IProduct> = (props) => {
         <ProductDetails>
           <ProductName>{name}</ProductName>
           <ProductPrice>{parsePrice(price)} VND</ProductPrice>
-          <ProductShortDesc>{shortDescription}</ProductShortDesc>
+          {/* <ProductShortDesc>{shortDescription}</ProductShortDesc> */}
         </ProductDetails>
       </StyledProductInfo>
       {children}
@@ -70,43 +74,35 @@ const Detail: React.FC<IProduct> = (props) => {
 const Product: React.FC<IProductProps> = ({ product, cart }) => {
   const createMarkup = (htmlString) => ({ __html: htmlString })
 
+  const router = useRouter()
+
+  const { loading, error, data } = useQuery(GET_PRODUCT, {
+    variables: {
+      input: {
+        id: router.query.id,
+      },
+    },
+  })
+
+  if (data?.getProductDetail) {
+    product = data.getProductDetail
+  }
+
+  console.log(product)
+
   return (
     <Layout>
-      {product ? (
-        product.name ? (
+      {(loading && <h2>Loading...</h2>) ||
+        (product && (
           <>
             <Detail {...product}>
               <div dangerouslySetInnerHTML={createMarkup(product.description)} />
             </Detail>
             {_.find(cart, ['id', product.id]) && <h3>Added to cart</h3>}
           </>
-        ) : (
-          ''
-        )
-      ) : (
-        <h2>Loading...</h2>
-      )}
+        ))}
     </Layout>
   )
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const res = await fetch(`${baseUrl}/product`)
-  const data = await res.json()
-  const products = data.data
-
-  const paths = products.map((prod) => `/product/${prod.id}`)
-
-  return { paths, fallback: true }
-}
-
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { id } = params
-
-  const res = await fetch(`${baseUrl}/product/${id}`)
-  const product = await res.json()
-
-  return { props: { product } }
-}
-
-export default Product
+export default withApollo({ ssr: true })(Product)

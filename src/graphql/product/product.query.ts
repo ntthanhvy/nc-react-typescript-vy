@@ -18,18 +18,13 @@ export const GET_PRODUCTS = gql`
 `
 
 export const GET_PRODUCT = gql`
-query GetProduct($input: GetProductInput) {
-  getProductDetail(input: $input) {
-    id
-    name
-    price
-    promotionPercent
-    imgUrl
-    media {
-      image
-      type
+  query GetProduct($input: GetProductDetailInput!) {
+    getProductDetail(input: $input) {
+      id
+      name
+      price
+      images
+      description
     }
-    description
   }
-} 
 `

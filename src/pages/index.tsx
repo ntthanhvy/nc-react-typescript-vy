@@ -1,8 +1,8 @@
 import React from 'react'
 import _ from 'lodash'
-import { GetStaticProps, GetServerSideProps } from 'next'
 import Link from 'next/link'
 import Router from 'next/router'
+import withApollo from '../utils/withApollo'
 
 import { Layout } from '../components/Layout'
 import { MdViewList, MdViewModule, MdSearch } from 'react-icons/md'
@@ -19,8 +19,10 @@ import SearchInput from '../components/elements/ProductList/SeachInput'
 import { Footer } from '../components/Footer'
 import { Card, Input } from '../components/ui-kits'
 
-import { baseUrl } from '../common/urlHelper'
 import { ICart } from './_app'
+import { useQuery, useLazyQuery } from '@apollo/react-hooks'
+import { GET_PRODUCTS } from '../graphql/product/product.query'
+import { error } from 'console'
 
 interface IProduct {
   id: string
@@ -41,6 +43,15 @@ const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
   const [listView, setListView] = React.useState<boolean>(false)
   const [keyword, setKeyword] = React.useState<string>('')
 
+  const { loading, error, data } = useQuery(GET_PRODUCTS, {
+    variables: {
+      input: {
+        keyword,
+        page: 1,
+      },
+    },
+  })
+
   const addToCart = (id) => {
     if (_.find(cart, ['id', id])) {
       let prod = _.find(cart, ['id', id])
@@ -55,11 +66,14 @@ const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
     setKeyword(e.target.value)
   }
 
-  const applySearch = async () => {
-    return await fetch(`${baseUrl}/product?keyword=${keyword}&page=1`)
-      .then((res) => res.json())
-      .then((res) => (products = res.data))
+  // if (loading) return <h2>Loading...</h2>
+  // if (error) return <h2>Error</h2>
+
+  if (data?.getAllProduct?.data) {
+    products = data.getAllProduct.data
   }
+
+  console.log(data?.getAllProduct?.data)
 
   return (
     <>
@@ -86,11 +100,7 @@ const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
         </SelectView>
         <StyledProductContainer>
           <SearchInput
-            searchIcon={
-              <Link href={`/?keyword=${keyword}&page=1`}>
-                <MdSearch fontSize={14} />
-              </Link>
-            }
+            searchIcon={<MdSearch fontSize={14} />}
             // onFinish={applySearch}
           >
             <Input
@@ -102,27 +112,28 @@ const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
             />
           </SearchInput>
           <ProductContainer blockView={blockView} listView={listView}>
-            {products.map((data: IProduct) => (
-              <Card
-                key={data.id}
-                imageURL={data.imgUrl}
-                buttonGroups={
-                  <>
-                    <CusBtn onClick={() => Router.push(`/product/${data.id}`)}>View</CusBtn>
-                    <CusBtn onClick={() => addToCart(data.id)}>Add to Cart</CusBtn>
-                  </>
-                }
-                blockView={blockView}
-                listView={listView}
-                product_name={data.name}
-              >
-                <span className="product_name" onClick={() => Router.push(`/product/${data.id}`)}>
-                  {data.name}
-                </span>
-                <span className="product_price">{data.price} VND</span>
-                <span>{data.shortDescription}</span>
-              </Card>
-            ))}
+            {(loading && <h2>Loading...</h2>) ||
+              products?.map((data: IProduct) => (
+                <Card
+                  key={data.id}
+                  imageURL={data.imgUrl}
+                  buttonGroups={
+                    <>
+                      <CusBtn onClick={() => Router.push(`/product/${data.id}`)}>View</CusBtn>
+                      <CusBtn onClick={() => addToCart(data.id)}>Add to Cart</CusBtn>
+                    </>
+                  }
+                  blockView={blockView}
+                  listView={listView}
+                  product_name={data.name}
+                >
+                  <span className="product_name" onClick={() => Router.push(`/product/${data.id}`)}>
+                    {data.name}
+                  </span>
+                  <span className="product_price">{data.price} VND</span>
+                  <span>{data.shortDescription}</span>
+                </Card>
+              ))}
           </ProductContainer>
         </StyledProductContainer>
       </Layout>
@@ -131,22 +142,4 @@ const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
   )
 }
 
-// export const getStaticProps: GetStaticProps = async (context) => {
-//   let keyword = context.params ? context.params.keyword : ''
-//   const res = await fetch(`${baseUrl}/product?keyword=${keyword}&page=1`)
-//   const data = await res.json()
-
-//   return { props: { products: data.data } }
-// }
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const {keyword, page} = context.query
-  console.log(context.query)
-
-  const res = await fetch(`${baseUrl}/product?keyword=${keyword}&page=${page}`)
-  const data = await res.json()
-
-  return { props: { products: data.data } }
-}
-
-export default Home
+export default withApollo({ ssr: true })(Home)
