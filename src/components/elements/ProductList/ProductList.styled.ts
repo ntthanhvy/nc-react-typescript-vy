@@ -54,15 +54,16 @@ export const ProductContainer = styled(Grid)`
   ${(props) =>
     props.blockView &&
     css`
-      grid-template-columns: repeat(4, 1fr);
-      grid-auto-row: minmax(130px, 200px);
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: minmax(130px, 150px);
 
       @media only screen and (max-width: 768px) {
         grid-template-columns: repeat(2, 1fr);
       }
 
       @media only screen and (min-width: 1025px) {
-        grid-template-columns: repeat(auto-fill, 200px);
+        grid-template-columns: repeat(3, 1fr);
+        grid-auto-rows: minmax(150px, 300px);
       }
 
       @media only screen and (max-width: 426px) {

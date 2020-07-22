@@ -18,6 +18,8 @@ import {
   ProductShortDesc,
 } from '../../components/elements/Product/Product.styled'
 
+const imgExd = 'https://media3.scdn.vn/'
+
 interface IProduct {
   id: string
   images: string[]
@@ -39,23 +41,18 @@ interface IProductProps {
 
 const Detail: React.FC<IProduct> = (props) => {
   const { images, name, id, children, price, shortDescription } = props
-  const [currImg, setCurrImg] = React.useState<string>('')
+  const [currImg, setCurrImg] = React.useState<string>(images[0])
 
   const parsePrice = (price) => price.toString().replace(/\d(?=(\d{3})+\.)/g, '$&,')
-  
-  React.useEffect(() => {
-    setCurrImg(images[0])
-    console.log(props)
-  })
 
   return (
     <StyledProduct key={id}>
       <StyledProductInfo>
         <ProductImagesHolder>
-          <ProductImg src={currImg} alt={`${currImg}`} />
+          <ProductImg src={imgExd + currImg} alt={`${currImg}`} />
           <ProductImages>
             {images.map((img) => (
-              <ProductImg small src={img} alt={`${img}`} onClick={() => setCurrImg(img)} />
+              <ProductImg small src={imgExd + img} alt={`${img}`} onClick={() => setCurrImg(img)} />
             ))}
           </ProductImages>
         </ProductImagesHolder>
@@ -76,14 +73,18 @@ const Product: React.FC<IProductProps> = ({ product, cart }) => {
   return (
     <Layout>
       {product ? (
-        <>
-          <Detail {...product}>
-            <div dangerouslySetInnerHTML={createMarkup(product.description)} />
-          </Detail>
-          {_.find(cart, ['id', product.id]) && <h3>Added to cart</h3>}
-        </>
+        product.name ? (
+          <>
+            <Detail {...product}>
+              <div dangerouslySetInnerHTML={createMarkup(product.description)} />
+            </Detail>
+            {_.find(cart, ['id', product.id]) && <h3>Added to cart</h3>}
+          </>
+        ) : (
+          ''
+        )
       ) : (
-        <h2>Product not found</h2>
+        <h2>Loading...</h2>
       )}
     </Layout>
   )

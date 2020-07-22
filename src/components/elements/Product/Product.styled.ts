@@ -8,7 +8,12 @@ export const StyledProduct = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  padding: 20px;
+  padding: calc(50 / 1440 * 100vw);
+
+  & .details-block > h4 {
+    font-size: calc(18 / 1440 * 100vw) !important;
+    font-weight: 700 !important;
+  }
 
   & .details-block > div > p {
     display: flex;
@@ -23,13 +28,18 @@ export const StyledProduct = styled.div`
       align-items: center;
     }
 
-    & span {
-      font-size: calc(16 / 1440 * 100vw) !important;
-    }
-
     & img {
       width: 80%;
     }
+  }
+
+  & .details-block span {
+    font-size: calc(14 / 1440 * 100vw) !important;
+    place-items: center !important;
+  }
+
+  & .details-block ul {
+    margin-inline-start: 20px !important;
   }
 `
 
@@ -50,14 +60,14 @@ export const ProductImages = styled(Grid)`
   grid-column: 5/6;
   place-items: center;
   grid-template-columns: repeat(auto-fill, 100%);
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
 `
 
 export const ProductImg = styled.img`
   grid-column: ${(props) => (props.small ? '1/2' : '1/5')};
 
-  width: 100%;
+  width: ${(props) => props.small && '100%'};
   height: ${(props) => (props.small ? '10vw' : '100%')};
   border: calc(2 / 1440 * 100vw) solid #e2e2e2;
   border-radius: calc(10 / 1440 * 100vw);
@@ -76,6 +86,7 @@ export const ProductName = styled.span`
   margin-bottom: calc(18 / 1440 * 100vw);
   font-size: calc(32 / 1440 * 100vw);
   font-weight: 700;
+  color: ${(props) => props.theme.colors.blue2};
 `
 
 export const ProductPrice = styled.span`

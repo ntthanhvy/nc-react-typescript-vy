@@ -10,7 +10,7 @@ export const StyledCard = styled(Cell)`
   ${(props) =>
     props.blockView &&
     css`
-      height: 130px;
+      // height: 130px;
 
       position: relative;
 
@@ -27,7 +27,7 @@ export const StyledCard = styled(Cell)`
     props.listView &&
     css`
       display: flex;
-      height: 200px;
+      // height: 200px;
       flex-direction: row;
       justify-content: flex-start;
       // align-items: flex-start;

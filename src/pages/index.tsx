@@ -1,7 +1,7 @@
 import React from 'react'
 import _ from 'lodash'
-import { GetStaticProps } from 'next'
-
+import { GetStaticProps, GetServerSideProps } from 'next'
+import Link from 'next/link'
 import Router from 'next/router'
 
 import { Layout } from '../components/Layout'
@@ -55,6 +55,12 @@ const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
     setKeyword(e.target.value)
   }
 
+  const applySearch = async () => {
+    return await fetch(`${baseUrl}/product?keyword=${keyword}&page=1`)
+      .then((res) => res.json())
+      .then((res) => (products = res.data))
+  }
+
   return (
     <>
       <Layout>
@@ -80,13 +86,12 @@ const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
         </SelectView>
         <StyledProductContainer>
           <SearchInput
-            searchIcon={<MdSearch fontSize={14} />}
-            onFinish={() =>
-              Router.push({
-                pathname: '/',
-                query: { keyword, page: 1 },
-              })
+            searchIcon={
+              <Link href={`/?keyword=${keyword}&page=1`}>
+                <MdSearch fontSize={14} />
+              </Link>
             }
+            // onFinish={applySearch}
           >
             <Input
               type="text"
@@ -126,9 +131,19 @@ const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
   )
 }
 
-export const getStaticProps: GetStaticProps = async (context) => {
-  let keyword = context.params ? context.params.keyword : ''
-  const res = await fetch(`${baseUrl}/product?keyword=${keyword}&page=1`)
+// export const getStaticProps: GetStaticProps = async (context) => {
+//   let keyword = context.params ? context.params.keyword : ''
+//   const res = await fetch(`${baseUrl}/product?keyword=${keyword}&page=1`)
+//   const data = await res.json()
+
+//   return { props: { products: data.data } }
+// }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const {keyword, page} = context.query
+  console.log(context.query)
+
+  const res = await fetch(`${baseUrl}/product?keyword=${keyword}&page=${page}`)
   const data = await res.json()
 
   return { props: { products: data.data } }
