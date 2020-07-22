@@ -1,7 +1,8 @@
 import React from 'react'
 import _ from 'lodash'
-import Router from 'next/router'
 import { GetStaticProps } from 'next'
+
+import Router from 'next/router'
 
 import { Layout } from '../components/Layout'
 import { MdViewList, MdViewModule, MdSearch } from 'react-icons/md'

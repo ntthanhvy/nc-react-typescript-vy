@@ -1,5 +1,6 @@
 import React from 'react'
 import { GetStaticPaths, GetStaticProps } from 'next'
+import Router, { useRouter } from 'next/router'
 import _ from 'lodash'
 
 import { baseUrl } from '../../common/urlHelper'
@@ -40,8 +41,8 @@ const Detail: React.FC<IProduct> = (props) => {
   const { images, name, id, children, price, shortDescription } = props
   const [currImg, setCurrImg] = React.useState<string>('')
 
-  const parsePrice = (price) => price.toString().replace(/(\d{3})(?=\d)/g, '$1.')
-
+  const parsePrice = (price) => price.toString().replace(/\d(?=(\d{3})+\.)/g, '$&,')
+  
   React.useEffect(() => {
     setCurrImg(images[0])
     console.log(props)
@@ -51,10 +52,10 @@ const Detail: React.FC<IProduct> = (props) => {
     <StyledProduct key={id}>
       <StyledProductInfo>
         <ProductImagesHolder>
-          <ProductImg src={currImg} alt={`${id}-img`} />
+          <ProductImg src={currImg} alt={`${currImg}`} />
           <ProductImages>
             {images.map((img) => (
-              <ProductImg small src={img} alt={`${id}-img`} />
+              <ProductImg small src={img} alt={`${img}`} onClick={() => setCurrImg(img)} />
             ))}
           </ProductImages>
         </ProductImagesHolder>
