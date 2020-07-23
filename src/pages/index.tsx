@@ -2,7 +2,7 @@ import React from 'react'
 import _ from 'lodash'
 import Link from 'next/link'
 import Router from 'next/router'
-import withApollo from '../utils/withApollo'
+import withApollo, { cartItemsVar } from '../utils/withApollo'
 
 import { Layout } from '../components/Layout'
 import { MdViewList, MdViewModule, MdSearch } from 'react-icons/md'
@@ -15,14 +15,14 @@ import {
   CusBtn,
 } from '../components/elements/ProductList/ProductList.styled'
 import SearchInput from '../components/elements/ProductList/SeachInput'
+import Cart from '../components/elements/Cart'
 
 import { Footer } from '../components/Footer'
 import { Card, Input } from '../components/ui-kits'
 
-import { ICart } from './_app'
-import { useQuery, useLazyQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/react-hooks'
 import { GET_PRODUCTS } from '../graphql/product/product.query'
-import { error } from 'console'
+import { GET_CART_ITEMS } from '../graphql/product/cart.query'
 
 interface IProduct {
   id: string
@@ -34,11 +34,11 @@ interface IProduct {
 
 interface IHome {
   products: IProduct[]
-  cart: ICart[]
-  setCart: (cart: ICart[]) => void
 }
 
-const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
+const Home: React.FC<IHome> = ({ products }) => {
+  const cartItems = cartItemsVar()
+
   const [blockView, setBlockView] = React.useState<boolean>(true)
   const [listView, setListView] = React.useState<boolean>(false)
   const [keyword, setKeyword] = React.useState<string>('')
@@ -53,27 +53,37 @@ const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
   })
 
   const addToCart = (id) => {
-    if (_.find(cart, ['id', id])) {
-      let prod = _.find(cart, ['id', id])
-      prod.count += 1
-      setCart(cart)
+    // if (_.find(cart, ['id', id])) {
+    //   let prod = _.find(cart, ['productId', id])
+    //   prod.count += 1
+    //   setCart(cart)
+    // } else {
+    //   setCart([...cart, { productId: id, quantity: 1 }])
+    //   cartItemsVar(cart)
+    // }
+    console.log(_.find(cartItems, ['productId', id]))
+
+    if (_.find(cartItems, ['productId', id])) {
+      let prod = _.find(cartItems, ['productId', id])
+      prod.quantity += 1
+
+      cartItemsVar(cartItems)
     } else {
-      setCart([...cart, { id: id, count: 1 }])
+      const newProd = { productId: id, quantity: 1 }
+      cartItemsVar([...cartItems, newProd])
     }
+
+    console.log(cartItems);
+    
   }
 
   const onSearchChanged = (e) => {
     setKeyword(e.target.value)
   }
 
-  // if (loading) return <h2>Loading...</h2>
-  // if (error) return <h2>Error</h2>
-
   if (data?.getAllProduct?.data) {
     products = data.getAllProduct.data
   }
-
-  console.log(data?.getAllProduct?.data)
 
   return (
     <>
@@ -98,6 +108,7 @@ const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
             <MdViewList fontSize={32} />
           </SelectOpt>
         </SelectView>
+        <Cart />
         <StyledProductContainer>
           <SearchInput
             searchIcon={<MdSearch fontSize={14} />}
