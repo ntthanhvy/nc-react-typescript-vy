@@ -13,7 +13,6 @@ import {
   MenuIcon,
 } from './Header.styled'
 
-
 interface IHeader {
   cartCount?: number
   theme?: any
@@ -45,10 +44,12 @@ const Header: React.FC<IHeader> = (props) => {
           </Link>
         </StyledHeaderMenuItem>
         <StyledHeaderMenuItem signIn>
-          <a>
-            Sign in
-            <FaUser className="userIcon" />
-          </a>
+          <Link href="/signin">
+            <a>
+              Sign in
+              <FaUser className="userIcon" />
+            </a>
+          </Link>
         </StyledHeaderMenuItem>
       </StyledHeaderMenu>
     </StyledHeader>

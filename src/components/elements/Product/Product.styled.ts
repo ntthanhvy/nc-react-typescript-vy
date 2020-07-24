@@ -50,14 +50,14 @@ export const StyledProductInfo = styled.div`
 `
 
 export const ProductImagesHolder = styled(Grid)`
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: 4fr 1fr;
   place-items: center;
 `
 
 export const ProductImages = styled(Grid)`
   width: 100%;
   max-height: calc(50vw + 8px);
-  grid-column: 5/6;
+  // grid-column: 5/6;
   place-items: center;
   grid-template-columns: repeat(auto-fill, 100%);
   overflow-y: auto;
@@ -65,7 +65,7 @@ export const ProductImages = styled(Grid)`
 `
 
 export const ProductImg = styled.img`
-  grid-column: ${(props) => (props.small ? '1/2' : '1/5')};
+  // grid-column: ${(props) => (props.small ? '1/2' : '1/5')};
 
   width: ${(props) => props.small && '100%'};
   height: ${(props) => (props.small ? '10vw' : '100%')};

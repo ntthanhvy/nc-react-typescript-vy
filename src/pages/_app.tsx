@@ -6,7 +6,6 @@ import { Header } from '../components/Header'
 
 import styled, { ThemeProvider } from 'styled-components'
 import theme from '../components/Theme'
-import withApollo from '../utils/withApollo'
 
 const StyledWrapper = styled.div`
   font-family: 'Noto Sans JP', sans-serif;
