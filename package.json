@@ -53,7 +53,7 @@
   "scripts": {
     "start": "next start",
     "build": "next build",
-    "test": "react-scripts test",
+    "test": "jest",
     "eject": "react-scripts eject",
     "dev": "NODE_OPTIONS='--inspect' next dev",
     "storybook": "start-storybook -p 9009 -s public",
