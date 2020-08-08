@@ -8,9 +8,17 @@ export const getProductsMock = [
     },
     result: {
       data: {
-        product: {
-          id: 1,
-          name: 'product-1',
+        getProducts: {
+          data: [
+            {
+              id: 1,
+              name: 'product-1',
+            },
+            {
+              id: 2,
+              name: 'product-1',
+            },
+          ],
         },
       },
     },
