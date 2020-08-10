@@ -4,12 +4,12 @@ import { Card } from '../../components/ui-kits'
 import { ThemeProvider } from 'styled-components'
 import theme from '../../components/Theme'
 
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import { GET_PRODUCTS } from '../../graphql/product/product.query'
 import { ProductContainer, CusBtn } from '../../components/elements/ProductList/ProductList.styled'
 import withApollo from '../../utils/withApollo'
 
-const ProductList = ({ products = [], AddToCart }) => {
+ export const ProductList = ({ products = [], AddToCart }) => {
   const { data, loading } = useQuery(GET_PRODUCTS, {
     variables: { input: { keyword: '', page: 1 } },
   })
@@ -20,6 +20,9 @@ const ProductList = ({ products = [], AddToCart }) => {
     console.log(data)
     products = data.getAllProduct.data
   }
+
+  console.log(data?.getAllProduct.data);
+  
 
   return (
     <ThemeProvider theme={theme}>

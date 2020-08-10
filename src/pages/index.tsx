@@ -11,10 +11,8 @@ import {
   SelectView,
   SelectOpt,
   StyledProductContainer,
-  ProductContainer,
-  CusBtn,
 } from '../components/elements/ProductList/ProductList.styled'
-import SearchInput from '../components/elements/ProductList/SeachInput'
+import { SearchInput, ProductList } from '../components/elements/ProductList'
 import Cart from '../components/elements/Cart'
 
 import { Footer } from '../components/Footer'
@@ -29,14 +27,14 @@ interface IProduct {
   name: string
   imgUrl: string
   price: number
-  shortDescription?: string
+  shortDescription: string
 }
 
 interface IHome {
   products: IProduct[]
 }
 
-const Home: React.FC<IHome> = ({ products }) => {
+export const Home: React.FC<IHome> = ({ products }) => {
   const cartItems = cartItemsVar()
 
   const [blockView, setBlockView] = React.useState<boolean>(true)
@@ -121,7 +119,7 @@ const Home: React.FC<IHome> = ({ products }) => {
               className="search-input"
             />
           </SearchInput>
-          <ProductContainer blockView={blockView} listView={listView} data-testid="products-list">
+          {/* <ProductContainer blockView={blockView} listView={listView}>
             {(loading && <h2>Loading...</h2>) ||
               products?.map((data: IProduct) => (
                 <Card
@@ -144,7 +142,17 @@ const Home: React.FC<IHome> = ({ products }) => {
                   <span>{data.shortDescription}</span>
                 </Card>
               ))}
-          </ProductContainer>
+          </ProductContainer> */}
+          {loading && <h2>Loading...</h2>}
+          {!loading && data && (
+            <ProductList
+              blockView={blockView}
+              listView={listView}
+              products={products}
+              addToCart={addToCart}
+              changePage={() => Router.push(`/product/${data.id}`)}
+            />
+          )}
         </StyledProductContainer>
       </Layout>
       <Footer />

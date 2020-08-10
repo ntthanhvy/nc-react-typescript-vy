@@ -4,20 +4,18 @@
 
 import React from 'react'
 import { MockedProvider } from '@apollo/client/testing'
-import { render, fireEvent, findAllByTestId, getAllByTestId } from '@testing-library/react'
-import { mount } from 'enzyme'
+import { render, screen } from '@testing-library/react'
 
-import ProductList from './ProductList'
+import { ProductList } from './ProductList'
 import theme from '../../components/Theme'
 import { getProductsMock } from '../../utils/gql-mock'
 import '@testing-library/jest-dom'
-import { resolve } from 'path'
 
 describe('ProductList', () => {
   const addToCart = jest.fn().mockImplementation((x) => x)
-  let component
+
   beforeEach(() => {
-    component = mount(
+    render(
       <MockedProvider mocks={getProductsMock} addTypename={false}>
         <ProductList AddToCart={addToCart} />
       </MockedProvider>
@@ -26,28 +24,29 @@ describe('ProductList', () => {
 
   it('display product list', async () => {
     await new Promise((resolve) => setTimeout(resolve, 5000))
+    // const { getByTestId } = component
 
-    const productsLst = component.find('[data-testid="products-list"]')
+    const productsLst = screen.getByTestId('products-list')
 
-    console.log(productsLst.children().html)
+    console.log(productsLst)
 
     expect(productsLst.children.length).toBe(1)
   })
 
-  it('Button addToCart', async () => {
-    await new Promise((resolve) => setTimeout(resolve, 5000))
+  // it('Button addToCart', async () => {
+  //   await new Promise((resolve) => setTimeout(resolve, 5000))
 
-    const addBtn = component
-      .find('[data-testid="products-list"]')
-      .find('[data-testid="add-to-cart"]')
-      .first()
+  //   const addBtn = component
+  //     .find('[data-testid="products-list"]')
+  //     .find('[data-testid="add-to-cart"]')
+  //     .first()
 
-    addBtn.simulate('click')
+  //   addBtn.simulate('click')
 
-    expect(addToCart).toHaveBeenCalled()
-  })
+  //   expect(addToCart).toHaveBeenCalled()
+  // })
 
-  it("addToCart should return item's id", () => {
-    expect(addToCart(1)).toBe(1)
-  })
+  // it("addToCart should return item's id", () => {
+  //   expect(addToCart(1)).toBe(1)
+  // })
 })

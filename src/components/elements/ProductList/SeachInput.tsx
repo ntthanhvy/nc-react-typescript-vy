@@ -21,7 +21,7 @@ interface ISearchInput {
  * containerClassName: className of Input container
  *
  */
-const SearchInput: React.FC<ISearchInput> = (props) => {
+export const SearchInput: React.FC<ISearchInput> = (props) => {
   return (
     <StyledSearchInput className={props.containerClassName}>
       {props.children}
