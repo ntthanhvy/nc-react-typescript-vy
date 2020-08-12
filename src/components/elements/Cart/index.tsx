@@ -1,33 +1,75 @@
 import React from 'react'
 
-import { StyledCart } from './Cart.styled'
+import {
+  StyledCart,
+  StyledCartTitle,
+  StyledCartText,
+  StyledCartTotal,
+  CartBtn,
+} from './Cart.styled'
 
-import { CartItem } from '../../ui-kits'
+import CartItem, { ICartItem } from './CartItem'
+import { useRouter } from 'next/router'
+import { formatter } from '../../../common/numberFormatter'
+import { Button } from '../../ui-kits'
 
-import { useQuery } from '@apollo/react-hooks'
-import { GET_CART_ITEMS } from '../../../graphql/product/cart.query'
-import withApollo from '../../../utils/withApollo'
+interface ICart {
+  cart: ICartItem[]
+  setCart?: (item) => void
+  removeCart?: (id: string) => void
+  className?: string
+}
 
-const Cart: React.FC = () => {
-  const { data, loading, error } = useQuery(GET_CART_ITEMS)
+const Cart: React.FC<ICart> = ({ cart, setCart, removeCart, className }) => {
+  const router = useRouter()
+  const total = () => {
+    let sum = 0
+    cart.forEach((item) => (sum += item.price * item.quantity))
+    return sum
+  }
 
-  if (loading) return <p>Loading</p>
-  if (error) return <p>ERROR: {error.message}</p>
+  const goToCheckout = () => {
+    router.push('/checkout')
+  }
+
+  const removeAllCart = () => {
+    setCart([])
+    localStorage.removeItem('cart')
+  }
 
   return (
-    <StyledCart columns={1}>
-      {data && data.cartItems.length === 0 ? (
-        <p>No items in your cart</p>
+    <StyledCart columns={1} className={className}>
+      <StyledCartTitle>
+        CART{' '}
+        <CartBtn onClick={removeAllCart} className="remove">
+          Remove Cart
+        </CartBtn>
+      </StyledCartTitle>
+      {!cart.length ? (
+        <StyledCartText>No Items in your Cart</StyledCartText>
       ) : (
         <>
-          {data &&
-            data.cartItems.map(({ productId, quantity }) => (
-              <CartItem key={productId} productId={productId} quantity={quantity} />
-            ))}
+          {cart.map(({ productId, quantity, name, price }) => (
+            <CartItem
+              key={productId}
+              productId={productId}
+              quantity={quantity}
+              name={name}
+              price={price}
+              remove={() => removeCart(productId)}
+            />
+          ))}
         </>
       )}
+      <StyledCartTotal>
+        <StyledCartText>Total: </StyledCartText>
+        <StyledCartText color="#FF0000" size="18px">
+          {formatter.format(total())}
+        </StyledCartText>
+      </StyledCartTotal>
+      <CartBtn onClick={goToCheckout}>{`Check out >>`}</CartBtn>
     </StyledCart>
   )
 }
 
-export default withApollo({ ssr: true })(Cart)
+export default Cart

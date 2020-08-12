@@ -21,16 +21,18 @@ import {
 import withApollo from '../../utils/withApollo'
 import { useQuery } from '@apollo/react-hooks'
 import { GET_PRODUCT } from '../../graphql/product/product.query'
+import { formatter } from '../../common/numberFormatter'
 
 const imgExd = 'https://media3.scdn.vn/'
 
-interface IProduct {
+export interface IProduct {
   id: string
-  images: string[]
+  images?: string[]
   name: string
   description: string
   price: number
   shortDescription: string
+  imgUrl?: string
 }
 
 interface ICart {
@@ -47,8 +49,6 @@ const Detail: React.FC<IProduct> = (props) => {
   const { images, name, id, children, price } = props
   const [currImg, setCurrImg] = React.useState<string>(images[0])
 
-  const parsePrice = (price) => price.toString().replace(/\d(?=(\d{3})+\.)/g, '$&,')
-
   return (
     <StyledProduct key={id}>
       <StyledProductInfo>
@@ -62,7 +62,7 @@ const Detail: React.FC<IProduct> = (props) => {
         </ProductImagesHolder>
         <ProductDetails>
           <ProductName>{name}</ProductName>
-          <ProductPrice>{parsePrice(price)} VND</ProductPrice>
+          <ProductPrice>{formatter.format(price)} VND</ProductPrice>
           {/* <ProductShortDesc>{shortDescription}</ProductShortDesc> */}
         </ProductDetails>
       </StyledProductInfo>
@@ -84,14 +84,20 @@ const Product: React.FC<IProductProps> = ({ product, cart }) => {
     },
   })
 
+  console.log(data)
+
   if (data?.getProductDetail) {
     product = data.getProductDetail
   }
 
-  console.log(product)
+  React.useEffect(() => {
+    console.log(product)
+    console.log(data)
+  }, [product, data])
 
   return (
     <Layout>
+      {error && <h2>{error.toString()}</h2>}
       {(loading && <h2>Loading...</h2>) ||
         (product && (
           <>

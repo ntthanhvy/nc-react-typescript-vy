@@ -1,11 +1,11 @@
 import React from 'react'
 import _ from 'lodash'
-import Link from 'next/link'
 import Router from 'next/router'
-import withApollo, { cartItemsVar } from '../utils/withApollo'
+import withApollo from '../utils/withApollo'
 
 import { Layout } from '../components/Layout'
 import { MdViewList, MdViewModule, MdSearch } from 'react-icons/md'
+import { IoIosCart, IoIosEye } from 'react-icons/io'
 
 import {
   SelectView,
@@ -13,6 +13,7 @@ import {
   StyledProductContainer,
   ProductContainer,
   CusBtn,
+  LeftSide,
 } from '../components/elements/ProductList/ProductList.styled'
 import SearchInput from '../components/elements/ProductList/SeachInput'
 import Cart from '../components/elements/Cart'
@@ -22,26 +23,18 @@ import { Card, Input } from '../components/ui-kits'
 
 import { useQuery } from '@apollo/react-hooks'
 import { GET_PRODUCTS } from '../graphql/product/product.query'
-import { GET_CART_ITEMS } from '../graphql/product/cart.query'
-
-interface IProduct {
-  id: string
-  name: string
-  imgUrl: string
-  price: number
-  shortDescription: string
-}
+import { ICartItem } from '../components/elements/Cart/CartItem'
+import { IProduct } from './product/[id]'
 
 interface IHome {
   products: IProduct[]
 }
 
 const Home: React.FC<IHome> = ({ products }) => {
-  const cartItems = cartItemsVar()
-
   const [blockView, setBlockView] = React.useState<boolean>(true)
   const [listView, setListView] = React.useState<boolean>(false)
   const [keyword, setKeyword] = React.useState<string>('')
+  const [cart, setCart] = React.useState<ICartItem[]>([])
 
   const { loading, error, data } = useQuery(GET_PRODUCTS, {
     variables: {
@@ -52,29 +45,31 @@ const Home: React.FC<IHome> = ({ products }) => {
     },
   })
 
-  const addToCart = (id) => {
-    // if (_.find(cart, ['id', id])) {
-    //   let prod = _.find(cart, ['productId', id])
-    //   prod.count += 1
-    //   setCart(cart)
-    // } else {
-    //   setCart([...cart, { productId: id, quantity: 1 }])
-    //   cartItemsVar(cart)
-    // }
-    console.log(_.find(cartItems, ['productId', id]))
-
-    if (_.find(cartItems, ['productId', id])) {
-      let prod = _.find(cartItems, ['productId', id])
+  const addToCart = (product) => {
+    if (cart.length && cart.find((prod) => prod.productId === product.id)) {
+      let prod = cart.find((prod) => prod.productId === product.id)
       prod.quantity += 1
 
-      cartItemsVar(cartItems)
+      setCart([...cart])
     } else {
-      const newProd = { productId: id, quantity: 1 }
-      cartItemsVar([...cartItems, newProd])
+      const newProd = {
+        price: product.price,
+        name: product.name,
+        productId: product.id,
+        quantity: 1,
+      }
+      setCart([...cart, newProd])
     }
 
-    console.log(cartItems);
-    
+    console.log(cart)
+    window.localStorage.setItem('cart', JSON.stringify(cart))
+  }
+
+  const removeCart = (id) => {
+    const temp = cart.filter((prod) => prod.productId !== id)
+    setCart(temp)
+
+    window.localStorage.setItem('cart', JSON.stringify(cart))
   }
 
   const onSearchChanged = (e) => {
@@ -84,6 +79,17 @@ const Home: React.FC<IHome> = ({ products }) => {
   if (data?.getAllProduct?.data) {
     products = data.getAllProduct.data
   }
+
+  React.useEffect(() => {
+    if (process.browser) {
+      let temp = window.localStorage.getItem('cart') || '[]'
+      setCart(JSON.parse(temp))
+    }
+  }, [])
+
+  React.useEffect(() => {
+    console.log(cart)
+  }, [cart])
 
   return (
     <>
@@ -108,20 +114,22 @@ const Home: React.FC<IHome> = ({ products }) => {
             <MdViewList fontSize={32} />
           </SelectOpt>
         </SelectView>
-        <Cart />
         <StyledProductContainer>
-          <SearchInput
-            searchIcon={<MdSearch fontSize={14} />}
-            // onFinish={applySearch}
-          >
-            <Input
-              type="text"
-              placeholder="Search"
-              value={keyword}
-              onChange={onSearchChanged}
-              className="search-input"
-            />
-          </SearchInput>
+          <LeftSide columns="unset">
+            <SearchInput
+              searchIcon={<MdSearch fontSize={14} />}
+              // onFinish={applySearch}
+            >
+              <Input
+                type="text"
+                placeholder="Search"
+                value={keyword}
+                onChange={onSearchChanged}
+                className="search-input"
+              />
+            </SearchInput>
+            <Cart className="cart" cart={cart} setCart={setCart} removeCart={removeCart} />
+          </LeftSide>
           <ProductContainer blockView={blockView} listView={listView}>
             {(loading && <h2>Loading...</h2>) ||
               products?.map((data: IProduct) => (
@@ -130,20 +138,17 @@ const Home: React.FC<IHome> = ({ products }) => {
                   imageURL={data.imgUrl}
                   buttonGroups={
                     <>
-                      <CusBtn onClick={() => Router.push(`/product/${data.id}`)}>View</CusBtn>
-                      <CusBtn onClick={() => addToCart(data.id)}>Add to Cart</CusBtn>
+                      <CusBtn onClick={() => Router.push(`/product/${data.id}`)}>
+                        <IoIosEye fontSize={18} />
+                      </CusBtn>
+                      <CusBtn onClick={() => addToCart(data)}>
+                        <IoIosCart fontSize={18} />
+                      </CusBtn>
                     </>
                   }
                   blockView={blockView}
-                  listView={listView}
-                  product_name={data.name}
-                >
-                  <span className="product_name" onClick={() => Router.push(`/product/${data.id}`)}>
-                    {data.name}
-                  </span>
-                  <span className="product_price">{data.price} VND</span>
-                  <span>{data.shortDescription}</span>
-                </Card>
+                  product={data}
+                />
               ))}
           </ProductContainer>
         </StyledProductContainer>

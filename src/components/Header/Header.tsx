@@ -14,12 +14,23 @@ import {
 } from './Header.styled'
 
 interface IHeader {
-  cartCount?: number
   theme?: any
 }
 
 const Header: React.FC<IHeader> = (props) => {
   const [showMenu, setShowMenu] = React.useState<Boolean>(false)
+  const [token, setToken] = React.useState<string>('')
+
+  React.useEffect(() => {
+    if (process.browser) {
+      setToken(localStorage.getItem('token'))
+    }
+  })
+
+  const signOut = () => {
+    localStorage.removeItem('token')
+    setToken('')
+  }
 
   return (
     <StyledHeader>
@@ -34,23 +45,27 @@ const Header: React.FC<IHeader> = (props) => {
           </Link>
         </StyledHeaderMenuItem>
         <StyledHeaderMenuItem>
-          <Link href="/">
-            <a>Products</a>
+          <Link href="/checkout">
+            <a>Checkout</a>
           </Link>
         </StyledHeaderMenuItem>
-        <StyledHeaderMenuItem>
-          <Link href="/">
-            <a>Contact</a>
-          </Link>
-        </StyledHeaderMenuItem>
-        <StyledHeaderMenuItem signIn>
-          <Link href="/signin">
-            <a>
-              Sign in
-              <FaUser className="userIcon" />
-            </a>
-          </Link>
-        </StyledHeaderMenuItem>
+        {token ? (
+          <>
+            <StyledHeaderMenuItem onClick={signOut}>Sign Out</StyledHeaderMenuItem>
+            <StyledHeaderMenuItem signIn>
+              User <FaUser className="userIcon" />
+            </StyledHeaderMenuItem>
+          </>
+        ) : (
+          <StyledHeaderMenuItem signIn>
+            <Link href="/signin">
+              <a>
+                Sign In
+                <FaUser className="userIcon" />
+              </a>
+            </Link>
+          </StyledHeaderMenuItem>
+        )}
       </StyledHeaderMenu>
     </StyledHeader>
   )

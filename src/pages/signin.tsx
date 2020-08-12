@@ -1,25 +1,18 @@
 import React from 'react'
-import Router from 'next/router'
+import { useRouter } from 'next/router'
 
-import {
-  StyledSignin,
-  SigninBox,
-  SigninHeader,
-  SigninForm,
-  StyledFormControl,
-  StyledFormInput,
-  StyledFormLabel,
-} from '../components/elements/SignIn/SignIn.styled'
-import StyledFormButton from '../components/elements/SignIn/FormButton'
+import { StyledSignin, SigninBox, SigninHeader } from '../components/elements/SignIn/SignIn.styled'
+import { Form } from '../components/ui-kits'
+import StyledFormButton from '../components/ui-kits/Form/FormButton'
 
 import { SIGN_IN } from '../graphql/auth/signin.graphql'
 import { useMutation } from '@apollo/react-hooks'
 import withApollo from '../utils/withApollo'
-import { setToken } from '../utils/service'
+import { setToken, getToken } from '../utils/service'
 
 const SignIn = () => {
   const [signIn, { loading, called, error, data }] = useMutation(SIGN_IN)
-
+  const router = useRouter()
   const onSubmit = (event) => {
     event.preventDefault()
 
@@ -31,36 +24,47 @@ const SignIn = () => {
     signIn({ variables: { input: { email, password } } })
   }
 
+  if (called && error) {
+    alert(error.toString())
+  }
+
   if (called && !loading && data?.signIn) {
     setToken(data.signIn.accessToken)
-    Router.push('/')
   }
+
+  React.useEffect(() => {
+    if (called && !loading && getToken()) router.back()
+  }, [router, loading])
 
   return (
     <StyledSignin>
       <SigninBox>
         <SigninHeader>Sign In</SigninHeader>
-        <SigninForm onSubmit={onSubmit}>
-          <StyledFormControl>
-            <StyledFormLabel>Email: </StyledFormLabel>
-            <StyledFormInput
+        <Form onSubmit={onSubmit}>
+          <Form.Item>
+            <Form.Label>Email: </Form.Label>
+            <Form.Input
+              required
               type="email"
               className="form-control"
               placeholder="abc@gmail.com"
               name="email"
             />
-          </StyledFormControl>
-          <StyledFormControl>
-            <StyledFormLabel>Password: </StyledFormLabel>
-            <StyledFormInput
+          </Form.Item>
+          <Form.Item>
+            <Form.Label>Password: </Form.Label>
+            <Form.Input
+              required
               type="password"
               className="form-control"
-              placeholder="abc@gmail.com"
+              placeholder="*******"
               name="password"
             />
-          </StyledFormControl>
-          <StyledFormButton type="submit" value="SIGN IN" disabled={called && loading} />
-        </SigninForm>
+          </Form.Item>
+          <Form.Button type="submit" disabled={called || loading} loading={loading}>
+            SIGN IN
+          </Form.Button>
+        </Form>
       </SigninBox>
     </StyledSignin>
   )
