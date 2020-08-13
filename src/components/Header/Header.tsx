@@ -2,7 +2,6 @@ import React from 'react'
 import Link from 'next/link'
 import Router from 'next/router'
 
-import { IoMdCart } from 'react-icons/io'
 import { FaUser } from 'react-icons/fa'
 
 import {
@@ -11,7 +10,9 @@ import {
   StyledHeaderLogo,
   StyledHeaderMenuItem,
   MenuIcon,
+  SignUpBtn,
 } from './Header.styled'
+// import { default as MenuLogo } from '../../../public/images/Hamburger.svg'
 
 interface IHeader {
   theme?: any
@@ -37,6 +38,7 @@ const Header: React.FC<IHeader> = (props) => {
       <StyledHeaderLogo onClick={() => Router.push('/')}>SWA</StyledHeaderLogo>
       <MenuIcon onClick={() => setShowMenu(!showMenu)} showMenu={showMenu}>
         <img src="/images/Hamburger.svg" />
+        {/* <MenuLogo /> */}
       </MenuIcon>
       <StyledHeaderMenu showMenu={showMenu}>
         <StyledHeaderMenuItem>
@@ -63,6 +65,10 @@ const Header: React.FC<IHeader> = (props) => {
                 Sign In
                 <FaUser className="userIcon" />
               </a>
+            </Link>
+
+            <Link href="/signup">
+              <SignUpBtn>Sign Up</SignUpBtn>
             </Link>
           </StyledHeaderMenuItem>
         )}

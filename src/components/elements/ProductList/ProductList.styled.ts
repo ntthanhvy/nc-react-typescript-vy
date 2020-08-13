@@ -7,34 +7,13 @@ export const StyledProductContainer = styled(Grid)`
   place-items: start;
   grid-template-columns: unset;
   grid-template-areas: 
-  'left'
+  'search'
   'products';
 
   @media only screen and (min-width: 1024px) {
-    grid-template: 'left products';
+    grid-template: 'search products';
     grid-auto-columns: 1fr 3fr;
 
-  }
-`;
-
-export const LeftSide = styled(Grid)`
-  grid-area: left;
-  grid-template-areas: 'search';
-  grid-gap: 20px;
-  width: 100%;
-
-  .cart {
-    display: none;
-  }
-
-  @media only screen and (min-width: 1024px) {
-    grid-template-areas:
-    'search'
-    'cart';
-
-    .cart {
-      display: grid;
-    }
   }
 `;
 
@@ -46,10 +25,14 @@ export const StyledSearchInput = styled.div`
   width: 100%;
   justify-content: space-between;
 
-  height: calc(40 / 1440 * 100vw);
+  height: 3rem;
   border-bottom: calc(2 / 1440 * 100vw) solid ${(props) =>
   props.theme.colors.primary};
   box-sizing: border-box;
+
+  > .search-input {
+    border: none;
+  }
 `;
 
 export const SearchIcon = styled.div`

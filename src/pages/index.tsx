@@ -13,12 +13,9 @@ import {
   StyledProductContainer,
   ProductContainer,
   CusBtn,
-  LeftSide,
 } from '../components/elements/ProductList/ProductList.styled'
 import SearchInput from '../components/elements/ProductList/SeachInput'
-import Cart from '../components/elements/Cart'
 
-import { Footer } from '../components/Footer'
 import { Card, Input } from '../components/ui-kits'
 
 import { useQuery } from '@apollo/react-hooks'
@@ -28,13 +25,14 @@ import { IProduct } from './product/[id]'
 
 interface IHome {
   products: IProduct[]
+  cart?: ICartItem[]
+  setCart?: (item) => void
 }
 
-const Home: React.FC<IHome> = ({ products }) => {
+const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
   const [blockView, setBlockView] = React.useState<boolean>(true)
   const [listView, setListView] = React.useState<boolean>(false)
   const [keyword, setKeyword] = React.useState<string>('')
-  const [cart, setCart] = React.useState<ICartItem[]>([])
 
   const { loading, error, data } = useQuery(GET_PRODUCTS, {
     variables: {
@@ -65,13 +63,6 @@ const Home: React.FC<IHome> = ({ products }) => {
     window.localStorage.setItem('cart', JSON.stringify(cart))
   }
 
-  const removeCart = (id) => {
-    const temp = cart.filter((prod) => prod.productId !== id)
-    setCart(temp)
-
-    window.localStorage.setItem('cart', JSON.stringify(cart))
-  }
-
   const onSearchChanged = (e) => {
     setKeyword(e.target.value)
   }
@@ -81,55 +72,43 @@ const Home: React.FC<IHome> = ({ products }) => {
   }
 
   React.useEffect(() => {
-    if (process.browser) {
-      let temp = window.localStorage.getItem('cart') || '[]'
-      setCart(JSON.parse(temp))
-    }
-  }, [])
-
-  React.useEffect(() => {
     console.log(cart)
   }, [cart])
 
   return (
     <>
       <Layout>
-        <SelectView columns={2}>
-          <SelectOpt
-            onClick={() => {
-              setBlockView(true)
-              setListView(false)
-            }}
-            blockView={blockView}
-          >
-            <MdViewModule fontSize={32} />
-          </SelectOpt>
-          <SelectOpt
-            onClick={() => {
-              setBlockView(false)
-              setListView(true)
-            }}
-            listView={listView}
-          >
-            <MdViewList fontSize={32} />
-          </SelectOpt>
+        <SelectView columns={1}>
+          {blockView ? (
+            <SelectOpt
+              onClick={() => {
+                setBlockView(false)
+              }}
+              listView={listView}
+            >
+              <MdViewList fontSize={32} />
+            </SelectOpt>
+          ) : (
+            <SelectOpt
+              onClick={() => {
+                setBlockView(true)
+              }}
+              blockView={blockView}
+            >
+              <MdViewModule fontSize={32} />
+            </SelectOpt>
+          )}
         </SelectView>
         <StyledProductContainer>
-          <LeftSide columns="unset">
-            <SearchInput
-              searchIcon={<MdSearch fontSize={14} />}
-              // onFinish={applySearch}
-            >
-              <Input
-                type="text"
-                placeholder="Search"
-                value={keyword}
-                onChange={onSearchChanged}
-                className="search-input"
-              />
-            </SearchInput>
-            <Cart className="cart" cart={cart} setCart={setCart} removeCart={removeCart} />
-          </LeftSide>
+          <SearchInput searchIcon={<MdSearch fontSize={14} />}>
+            <Input
+              type="text"
+              placeholder="Search"
+              value={keyword}
+              onChange={onSearchChanged}
+              className="search-input"
+            />
+          </SearchInput>
           <ProductContainer blockView={blockView} listView={listView}>
             {(loading && <h2>Loading...</h2>) ||
               products?.map((data: IProduct) => (
@@ -153,7 +132,6 @@ const Home: React.FC<IHome> = ({ products }) => {
           </ProductContainer>
         </StyledProductContainer>
       </Layout>
-      <Footer />
     </>
   )
 }

@@ -12,12 +12,12 @@ export const StyledInput = styled.input`
   border: none;
   border-bottom: calc(2 / 1440 * 100vw) solid ${(props) => props.theme.colors.primary};
   height: calc(40 / 1440 * 100vw);
-  font-size: 12px;
+  font-size: 1rem;
   color: ${(props) => props.theme.colors.primary};
 
-  &:placeholder {
+  &::placeholder {
     font-weight: 300;
     font-style: italic;
-    color: ${(props) => `${props.theme.colors.primary}`};
+    color: ${(props) => `${props.theme.colors.secondary}`};
   }
 `

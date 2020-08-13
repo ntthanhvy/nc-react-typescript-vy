@@ -11,7 +11,6 @@ import {
 import CartItem, { ICartItem } from './CartItem'
 import { useRouter } from 'next/router'
 import { formatter } from '../../../common/numberFormatter'
-import { Button } from '../../ui-kits'
 
 interface ICart {
   cart: ICartItem[]
@@ -20,7 +19,7 @@ interface ICart {
   className?: string
 }
 
-const Cart: React.FC<ICart> = ({ cart, setCart, removeCart, className }) => {
+const Cart: React.FC<ICart> = ({ cart, setCart, removeCart, className, ...props }) => {
   const router = useRouter()
   const total = () => {
     let sum = 0
@@ -46,7 +45,7 @@ const Cart: React.FC<ICart> = ({ cart, setCart, removeCart, className }) => {
         </CartBtn>
       </StyledCartTitle>
       {!cart.length ? (
-        <StyledCartText>No Items in your Cart</StyledCartText>
+        <StyledCartText color="#8a9599">No Items in your Cart</StyledCartText>
       ) : (
         <>
           {cart.map(({ productId, quantity, name, price }) => (
@@ -61,13 +60,13 @@ const Cart: React.FC<ICart> = ({ cart, setCart, removeCart, className }) => {
           ))}
         </>
       )}
-      <StyledCartTotal>
+      {/* <StyledCartTotal>
         <StyledCartText>Total: </StyledCartText>
         <StyledCartText color="#FF0000" size="18px">
           {formatter.format(total())}
         </StyledCartText>
       </StyledCartTotal>
-      <CartBtn onClick={goToCheckout}>{`Check out >>`}</CartBtn>
+      <CartBtn onClick={goToCheckout}>{`Check out >>`}</CartBtn> */}
     </StyledCart>
   )
 }

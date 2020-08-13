@@ -1,12 +1,10 @@
 import React from 'react'
-import { GetStaticPaths, GetStaticProps } from 'next'
 import Router, { useRouter } from 'next/router'
-import _ from 'lodash'
 
-import { baseUrl } from '../../common/urlHelper'
 import { Layout } from '../../components/Layout'
 
 import {
+  StyledProductText,
   StyledProduct,
   StyledProductInfo,
   ProductImagesHolder,
@@ -15,13 +13,15 @@ import {
   ProductDetails,
   ProductName,
   ProductPrice,
-  ProductShortDesc,
+  BackBtn,
 } from '../../components/elements/Product/Product.styled'
 
 import withApollo from '../../utils/withApollo'
 import { useQuery } from '@apollo/react-hooks'
 import { GET_PRODUCT } from '../../graphql/product/product.query'
 import { formatter } from '../../common/numberFormatter'
+import { ICartItems } from '../../utils/cache'
+import { IoIosArrowDropleft } from 'react-icons/io'
 
 const imgExd = 'https://media3.scdn.vn/'
 
@@ -35,22 +35,26 @@ export interface IProduct {
   imgUrl?: string
 }
 
-interface ICart {
-  id: string
-  count: number
-}
-
 interface IProductProps {
   product: IProduct
-  cart: ICart
+  cart: ICartItems[]
 }
 
 const Detail: React.FC<IProduct> = (props) => {
   const { images, name, id, children, price } = props
   const [currImg, setCurrImg] = React.useState<string>(images[0])
 
+  const router = useRouter()
+
+  const goBack = () => {
+    router.back()
+  }
+
   return (
     <StyledProduct key={id}>
+      <BackBtn onClick={goBack}>
+        <IoIosArrowDropleft fontSize={35} />
+      </BackBtn>
       <StyledProductInfo>
         <ProductImagesHolder>
           <ProductImg src={imgExd + currImg} alt={`${currImg}`} />
@@ -97,14 +101,14 @@ const Product: React.FC<IProductProps> = ({ product, cart }) => {
 
   return (
     <Layout>
-      {error && <h2>{error.toString()}</h2>}
-      {(loading && <h2>Loading...</h2>) ||
+      {error && <StyledProductText type="title">{error.toString()}</StyledProductText>}
+      {(loading && <StyledProductText type="title">Loading...</StyledProductText>) ||
         (product && (
           <>
             <Detail {...product}>
               <div dangerouslySetInnerHTML={createMarkup(product.description)} />
             </Detail>
-            {_.find(cart, ['id', product.id]) && <h3>Added to cart</h3>}
+            {cart.find((c) => c.productId === product.id) && <h3>Added to cart</h3>}
           </>
         ))}
     </Layout>
