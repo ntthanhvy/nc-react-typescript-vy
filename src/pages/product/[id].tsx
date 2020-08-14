@@ -20,7 +20,7 @@ import withApollo from '../../utils/withApollo'
 import { useQuery } from '@apollo/react-hooks'
 import { GET_PRODUCT } from '../../graphql/product/product.query'
 import { formatter } from '../../common/numberFormatter'
-import { ICartItems } from '../../utils/cache'
+import { ICartItem } from '../../components/elements/Cart/CartItem'
 import { IoIosArrowDropleft } from 'react-icons/io'
 
 const imgExd = 'https://media3.scdn.vn/'
@@ -37,7 +37,7 @@ export interface IProduct {
 
 interface IProductProps {
   product: IProduct
-  cart: ICartItems[]
+  cart: ICartItem[]
 }
 
 const Detail: React.FC<IProduct> = (props) => {
