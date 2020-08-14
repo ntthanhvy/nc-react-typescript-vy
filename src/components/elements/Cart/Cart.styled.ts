@@ -4,10 +4,11 @@ import { Button } from "../../ui-kits";
 
 export const StyledCart = styled(Grid)`
   grid-area: cart;
-  // height: 90%;
   overflow-y: auto;
   padding: 1rem;
   place-items: flex-start;
+  grid-auto-rows: 60px;
+  grid-gap: 15px;
 `;
 
 export const StyledCartTitle = styled.h2`
@@ -43,13 +44,14 @@ export const StyledCartItem = styled(Grid)`
     'name remove'
     'price quantity';
   grid-template-columns: unset;
+  grid-auto-rows: 30px;
+  grid-gap: 6px;
   place-content: space-between;
   width: 100%;
 `;
 
 export const StyledCartItemName = styled.span`
   grid-area: name;
-  width: 95%;
   font-size: 1rem;
   font-weight: bold;
   color: ${(props) => props.theme.colors.primary};
@@ -87,10 +89,9 @@ export const RemoveCartItem = styled.button`
 
 export const StyledCartTotal = styled.div`
   display: grid;
-  margin-top: 30px;
   padding: 1rem;
   place-items: center;
-  grid-gap: 20px;
+  grid-gap: 8px;
   width: 100%;
 
   & > span {
@@ -120,12 +121,15 @@ export const StyledFloatIcon = styled.div`
     bottom: 50px;
     width: 350px;
     height: 400px;
-    border-radius: 1em;
+    overflow: hidden;
+    border-radius: .2em;
 `;
 
 export const StyledFloatCartInner = styled.div`
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
     place-items: flex-start;
 
     clip-path: circle(5% at 6% 95%);

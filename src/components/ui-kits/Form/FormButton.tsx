@@ -11,9 +11,9 @@ interface IFormButton {
   outline?: boolean
 }
 
-const FormButton = ({ children, loading, disabled, type, outline = false }) => {
+const FormButton = ({ children, loading, type, outline = false, ...props }) => {
   return (
-    <StyledFormButton type={type} disabled={disabled}>
+    <StyledFormButton type={type}>
       {children} {loading && <AiOutlineLoading className="loading" />}
     </StyledFormButton>
   )

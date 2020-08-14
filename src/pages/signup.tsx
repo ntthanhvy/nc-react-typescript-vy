@@ -11,10 +11,14 @@ import { setToken, getToken } from '../utils/service'
 import { SIGN_UP } from '../graphql/auth/signup.graphql'
 
 const SignIn = () => {
-  const [signUp, { loading, called, error, data }] = useMutation(SIGN_UP)
+  const [signUp, { called, error, data }] = useMutation(SIGN_UP)
+  const [loading, setLoading] = React.useState<boolean>(false)
+
   const router = useRouter()
+
   const onSubmit = (event) => {
     event.preventDefault()
+    setLoading(true)
 
     const formData = new FormData(event.target)
 
@@ -23,20 +27,17 @@ const SignIn = () => {
     const fullName = formData.get('fullName')
 
     signUp({ variables: { input: { email, password, fullName } } })
+      .then((res) => {
+        setLoading(false)
+        window.localStorage.clear()
+        setToken(res.data.signUp.token)
+        router.push('/')
+      })
+      .catch((err) => {
+        setLoading(false)
+        alert(err.message)
+      })
   }
-
-  if (called && error) {
-    alert(error.toString())
-  }
-
-  if (called && !loading && data?.signIn) {
-    setToken(data.signIn.accessToken)
-    router.back()
-  }
-
-  React.useEffect(() => {
-    if (called && !loading && getToken()) router.back()
-  }, [router, loading])
 
   return (
     <StyledSignin>

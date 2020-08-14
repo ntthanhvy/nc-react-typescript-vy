@@ -6,10 +6,8 @@ const Checkout = () => {
     if (process.browser) {
       const token = localStorage.getItem('token')
       if (!token) {
-        setTimeout(() => {
-          alert('You need to login!')
-        }, 5000)
-        Router.push('/signin')
+        alert('You need to login!')
+        Router.back()
       }
     }
   })

@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 
 import { StyledSignin, SigninBox, SigninHeader } from '../components/elements/SignIn/SignIn.styled'
 import { Form } from '../components/ui-kits'
-import StyledFormButton from '../components/ui-kits/Form/FormButton'
 
 import { SIGN_IN } from '../graphql/auth/signin.graphql'
 import { useMutation } from '@apollo/react-hooks'
@@ -11,30 +10,37 @@ import withApollo from '../utils/withApollo'
 import { setToken, getToken } from '../utils/service'
 
 const SignIn = () => {
-  const [signIn, { loading, called, error, data }] = useMutation(SIGN_IN)
+  const [signIn, { called, error, data }] = useMutation(SIGN_IN)
+  const [loading, setLoading] = React.useState<boolean>(false)
+
   const router = useRouter()
+
   const onSubmit = (event) => {
     event.preventDefault()
-
+    setLoading(true)
     const formData = new FormData(event.target)
 
     const email = formData.get('email')
     const password = formData.get('password')
 
     signIn({ variables: { input: { email, password } } })
-  }
+      .then((res) => {
+        setLoading(false)
+        window.localStorage.clear()
+        setToken(res.data.signIn.accessToken)
 
-  if (called && error) {
-    alert(error.toString())
-  }
+        formData.set('email', '')
+        formData.set('password', '')
+        router.push('/')
+      })
+      .catch((error) => {
+        setLoading(false)
 
-  if (called && !loading && data?.signIn) {
-    setToken(data.signIn.accessToken)
+        formData.set('email', '')
+        formData.set('password', '')
+        alert(error.toString())
+      })
   }
-
-  React.useEffect(() => {
-    if (called && !loading && getToken()) router.back()
-  }, [router, loading])
 
   return (
     <StyledSignin>
@@ -61,7 +67,7 @@ const SignIn = () => {
               name="password"
             />
           </Form.Item>
-          <Form.Button type="submit" disabled={called || loading} loading={loading}>
+          <Form.Button type="submit" loading={loading}>
             SIGN IN
           </Form.Button>
         </Form>

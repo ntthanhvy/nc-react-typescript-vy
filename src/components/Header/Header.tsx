@@ -29,8 +29,7 @@ const Header: React.FC<IHeader> = (props) => {
   })
 
   const signOut = () => {
-    localStorage.removeItem('token')
-    setToken('')
+    window.localStorage.clear()
   }
 
   return (
@@ -53,9 +52,15 @@ const Header: React.FC<IHeader> = (props) => {
         </StyledHeaderMenuItem>
         {token ? (
           <>
-            <StyledHeaderMenuItem onClick={signOut}>Sign Out</StyledHeaderMenuItem>
             <StyledHeaderMenuItem signIn>
-              User <FaUser className="userIcon" />
+              <Link href="#">
+                <a>
+                  User <FaUser className="userIcon" />
+                </a>
+              </Link>
+              <Link href="/">
+                <SignUpBtn onClick={signOut}>Sign out</SignUpBtn>
+              </Link>
             </StyledHeaderMenuItem>
           </>
         ) : (

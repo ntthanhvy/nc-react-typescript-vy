@@ -42,7 +42,6 @@ const CartFloatIcon: React.FC<IFloatCart> = ({ cart, setCart, removeCart }) => {
     <StyledFloatIcon>
       <StyledFloatCartInner>
         <Cart className="cart" cart={cart} setCart={setCart} removeCart={removeCart} />
-        <IoIosCart fontSize={28} />
         <StyledCartTotal>
           <StyledCartText>
             Total:{' '}
@@ -50,9 +49,9 @@ const CartFloatIcon: React.FC<IFloatCart> = ({ cart, setCart, removeCart }) => {
               {formatter.format(total())}
             </StyledCartText>
           </StyledCartText>
-
           <CartBtn onClick={goToCheckout}>{`Check out >>`}</CartBtn>
         </StyledCartTotal>
+        <IoIosCart fontSize={28} />
       </StyledFloatCartInner>
       <Badge className="badge">{cart.length}</Badge>
     </StyledFloatIcon>

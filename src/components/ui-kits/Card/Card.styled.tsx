@@ -59,7 +59,7 @@ export const StyledCardBody = styled.div`
   display: grid;
   width: 100%;
   height: 100%;
-  place-items: start;
+  place-items: flex-start;
   grid-area: body;
   grid-template-areas:
     'name name'
@@ -108,6 +108,9 @@ export const CardOverlay = styled.div`
 export const StyledCardText = styled.span`
   word-wrap: break-word;
   cursor: pointer;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 
   ${(props) => {
     switch (props.type) {
