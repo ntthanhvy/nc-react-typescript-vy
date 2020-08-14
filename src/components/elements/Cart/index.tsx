@@ -20,17 +20,6 @@ interface ICart {
 }
 
 const Cart: React.FC<ICart> = ({ cart, setCart, removeCart, className, ...props }) => {
-  const router = useRouter()
-  const total = () => {
-    let sum = 0
-    cart.forEach((item) => (sum += item.price * item.quantity))
-    return sum
-  }
-
-  const goToCheckout = () => {
-    router.push('/checkout')
-  }
-
   const removeAllCart = () => {
     setCart([])
     localStorage.removeItem('cart')
@@ -60,13 +49,6 @@ const Cart: React.FC<ICart> = ({ cart, setCart, removeCart, className, ...props 
           ))}
         </>
       )}
-      {/* <StyledCartTotal>
-        <StyledCartText>Total: </StyledCartText>
-        <StyledCartText color="#FF0000" size="18px">
-          {formatter.format(total())}
-        </StyledCartText>
-      </StyledCartTotal>
-      <CartBtn onClick={goToCheckout}>{`Check out >>`}</CartBtn> */}
     </StyledCart>
   )
 }

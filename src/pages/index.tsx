@@ -18,10 +18,11 @@ import SearchInput from '../components/elements/ProductList/SeachInput'
 
 import { Card, Input } from '../components/ui-kits'
 
-import { useQuery } from '@apollo/react-hooks'
+import { useLazyQuery } from '@apollo/react-hooks'
 import { GET_PRODUCTS } from '../graphql/product/product.query'
 import { ICartItem } from '../components/elements/Cart/CartItem'
 import { IProduct } from './product/[id]'
+import { error } from 'console'
 
 interface IHome {
   products: IProduct[]
@@ -31,17 +32,9 @@ interface IHome {
 
 const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
   const [blockView, setBlockView] = React.useState<boolean>(true)
-  const [listView, setListView] = React.useState<boolean>(false)
   const [keyword, setKeyword] = React.useState<string>('')
 
-  const { loading, error, data } = useQuery(GET_PRODUCTS, {
-    variables: {
-      input: {
-        keyword,
-        page: 1,
-      },
-    },
-  })
+  const [getProducts, { loading, error, data }] = useLazyQuery(GET_PRODUCTS)
 
   const addToCart = (product) => {
     if (cart.length && cart.find((prod) => prod.productId === product.id)) {
@@ -59,8 +52,12 @@ const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
       setCart([...cart, newProd])
     }
 
-    console.log(cart)
     window.localStorage.setItem('cart', JSON.stringify(cart))
+  }
+
+  const onSubmitInput = (e) => {
+    e.preventDefault()
+    getProducts({ variables: { input: { keyword, page: 1 } } })
   }
 
   const onSearchChanged = (e) => {
@@ -72,7 +69,17 @@ const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
   }
 
   React.useEffect(() => {
+    getProducts({
+      variables: {
+        input: {
+          keyword,
+          page: 1,
+        },
+      },
+    })
+
     console.log(cart)
+    console.log(products)
   }, [cart])
 
   return (
@@ -84,7 +91,7 @@ const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
               onClick={() => {
                 setBlockView(false)
               }}
-              listView={listView}
+              listView={!blockView}
             >
               <MdViewList fontSize={32} />
             </SelectOpt>
@@ -100,7 +107,7 @@ const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
           )}
         </SelectView>
         <StyledProductContainer>
-          <SearchInput searchIcon={<MdSearch fontSize={14} />}>
+          <SearchInput onSubmitInput={onSubmitInput} searchIcon={<MdSearch fontSize={14} />}>
             <Input
               type="text"
               placeholder="Search"
@@ -109,7 +116,8 @@ const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
               className="search-input"
             />
           </SearchInput>
-          <ProductContainer blockView={blockView} listView={listView}>
+          <ProductContainer blockView={blockView}>
+            {error && <h2>{error.message}</h2>}
             {(loading && <h2>Loading...</h2>) ||
               products?.map((data: IProduct) => (
                 <Card

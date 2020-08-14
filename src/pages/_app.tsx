@@ -10,7 +10,6 @@ import FloatCart from '../components/elements/Cart/CartFloatIcon'
 import styled, { ThemeProvider } from 'styled-components'
 import theme from '../components/Theme'
 import { ICartItem } from '../components/elements/Cart/CartItem'
-// import '../components/Theme/main.css'
 
 const StyledWrapper = styled.div`
   font-family: 'Ubuntu', sans-serif;
@@ -40,6 +39,10 @@ const globalStyles = `
 const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
   const [cart, setCart] = React.useState<ICartItem[]>([])
   const router = useRouter()
+
+  const removeCart = (id) => {
+    setCart(cart.filter((c) => c.productId !== id))
+  }
 
   React.useEffect(() => {
     if (process.browser) {
@@ -73,7 +76,9 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
         </Head>
         <Header />
         <Component {...pageProps} cart={cart} setCart={setCart} />
-        {!router.pathname.includes('sign') && <FloatCart cart={cart} setCart={setCart} />}
+        {!router.pathname.includes('sign') && (
+          <FloatCart cart={cart} setCart={setCart} removeCart={removeCart} />
+        )}
         <Footer />
       </StyledWrapper>
     </ThemeProvider>

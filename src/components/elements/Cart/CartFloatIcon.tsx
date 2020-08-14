@@ -18,16 +18,11 @@ import { IoIosCart } from 'react-icons/io'
 export interface IFloatCart {
   cart?: ICartItem[]
   setCart?: (item) => void
+  removeCart?: (id) => void
 }
 
-const CartFloatIcon: React.FC<IFloatCart> = ({ cart, setCart }) => {
+const CartFloatIcon: React.FC<IFloatCart> = ({ cart, setCart, removeCart }) => {
   const router = useRouter()
-  const removeCart = (id) => {
-    const temp = cart.filter((prod) => prod.productId !== id)
-    setCart(temp)
-
-    window.localStorage.setItem('cart', JSON.stringify(cart))
-  }
 
   const total = () => {
     let sum = 0

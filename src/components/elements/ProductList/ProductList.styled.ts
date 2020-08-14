@@ -17,21 +17,22 @@ export const StyledProductContainer = styled(Grid)`
   }
 `;
 
-export const StyledSearchInput = styled.div`
+export const StyledSearchInput = styled.form`
   grid-area: search;
   display: flex;
   max-height: 40px;
   min-height: 20px;
   width: 100%;
   justify-content: space-between;
+  box-sizing: border-box;
 
   height: 3rem;
-  border-bottom: calc(2 / 1440 * 100vw) solid ${(props) =>
-  props.theme.colors.primary};
+  border-bottom: 2px solid ${(props) => props.theme.colors.primary};
   box-sizing: border-box;
 
   > .search-input {
     border: none;
+    height: 100%;
   }
 `;
 

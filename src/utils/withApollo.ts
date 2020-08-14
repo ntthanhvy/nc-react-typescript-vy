@@ -1,29 +1,10 @@
-import { withApollo } from 'next-apollo'
-// import ApolloClient, { InMemoryCache } from 'apollo-boost'
-import { makeVar, ApolloClient, InMemoryCache } from '@apollo/client'
+import { withApollo } from "next-apollo";
+import {  ApolloClient, InMemoryCache } from "@apollo/client";
 
-export interface ICartItems {
-  productId: string
-  quantity: number
-}
-
-export const cartItemsVar = makeVar<ICartItems[]>([])
 
 const apolloClient = new ApolloClient({
-  uri: 'https://min-shop.herokuapp.com/graphql',
-  cache: new InMemoryCache({
-    typePolicies: {
-      Query: {
-        fields: {
-          cartItems: {
-            read() {
-              return cartItemsVar()
-            },
-          },
-        },
-      },
-    },
-  }),
-})
+  uri: "https://min-shop.herokuapp.com/graphql",
+  cache: new InMemoryCache(),
+});
 
-export default withApollo(apolloClient)
+export default withApollo(apolloClient);
