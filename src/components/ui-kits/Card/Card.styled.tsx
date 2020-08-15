@@ -2,147 +2,138 @@ import styled, { css } from 'styled-components'
 import { Cell } from 'styled-css-grid'
 
 export const StyledCard = styled(Cell)`
-  position: relative;
-  word-wrap: break-word;
   overflow: hidden;
   width: 100%;
+  border-radius: 0.4rem;
+  border: 1px solid ${(props) => props.theme.colors.primary};
 
   ${(props) =>
-    props.blockView &&
-    css`
-      // height: 130px;
+    props.blockView
+      ? css`
+          position: relative;
+          cursor: pointer;
 
-      position: relative;
-
-      &:hover {
-        cursor: pointer;
-
-        & .overlay {
-          display: flex;
-        }
-      }
-    `}
-
-  ${(props) =>
-    props.listView &&
-    css`
-      display: flex;
-      // height: 200px;
-      flex-direction: row;
-      justify-content: flex-start;
-      // align-items: flex-start;
-    `}
+          &:hover .overlay {
+            clip-path: inset(0% 0% 0% 0%);
+          }
+        `
+      : css`
+          display: grid;
+          place-items: start;
+          grid-template-areas: 'image body';
+          border: none;
+          grid-auto-columns: 200px auto;
+          grid-gap: 20px;
+        `}
 `
 
 export const StyledCardImage = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position: absolute;
+  display: grid;
+  place-items: center;
   height: 100%;
   min-width: 10em;
   width: 100%;
-  border: 1px solid ${(props) => props.theme.colors.blue1};
-  border-radius: calc(10 / 1440 * 100vw);
+  border-radius: 0.4rem;
   overflow: hidden;
+  grid-area: image;
 
   ${(props) =>
-    props.listView &&
+    !props.blockView &&
     css`
-      padding: 10px;
+      position: initial;
       margin-right: 20px;
-      width: calc(250 / 1440 * 100vw);
-      height: calc(250 / 1440 * 100vw);
+      width: 100%;
+      border: 1px solid ${(props) => props.theme.colors.blue1};
     `}
 
-  &:hover {
-    cursor: pointer;
-  }
-`
-
-export const StyledImg = styled.img`
-  // width: 120%;
-  height: 100%;
-  border-radius: calc(10 / 1440 * 100vw);
   cursor: pointer;
 `
 
-export const StyledCardBody = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  flex: 1;
-
-  .product_name,
-  .product_price {
-    font-weight: 700;
-    font-size: calc(26 / 1440 * 100vw);
-
-    @media only screen and (max-width: 768px) {
-      font-size: 18px;
-    }
-
-    @media only screen and (max-width: 414px) {
-      font-size: calc(26 / 1440 * 100vw);
-    }
-  }
-
-  .product_name {
-    color: ${(props) => props.theme.colors.blue1};
-    margin-bottom: calc(12 / 1440 * 100vw);
-
-    &:hover {
-      cursor: pointer;
-      text-decoration: underline;
-    }
-  }
-
-  .product_price {
-    color: ${(props) => props.theme.colors.red1};
-  }
+export const StyledImg = styled.img`
+  width: 100%;
+  height: auto;
 `
 
-export const CardOverlay = styled.div`
+export const StyledCardBody = styled.div`
+  display: grid;
   width: 100%;
   height: 100%;
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  background: ${(props) => `${props.theme.colors.dark}80`};
-  // background-opacity: 0.4;
-  padding: 10px;
-
-  & span {
-    font-size: calc(18 / 1440 * 100vw);
-    color: ${(props) => props.theme.colors.light};
-    padding: 20px;
-  }
+  place-items: flex-start;
+  grid-area: body;
+  grid-template-areas:
+    'name name'
+    'price buttons';
 `
 
 export const StyledCardButtonGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  grid-area: buttons;
+  display: grid;
+  place-items: end;
+  width: 100%;
+  place-self: end;
 
   ${(props) =>
-    props.blockView &&
-    css`
-      & button:first-child {
-        margin-bottom: 10px;
-      }
-    `}
+    props.blockView
+      ? css`
+          & button:first-child {
+            margin-bottom: 10px;
+          }
+        `
+      : css`
+          justify-content: flex-end;
+          grid-template: auto / 30px 30px;
+          grid-gap: 30px;
+        `};
+`
 
-  ${(props) =>
-    props.listView &&
-    css`
-      flex-direction: row-reverse;
-      width: 100%;
-      justify-content: space-between;
+export const CardOverlay = styled.div`
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  background: rgba(214, 224, 226, 0.8);
+  padding: 0.5rem;
+  clip-path: inset(100% 0% 0% 0%);
+  transition: clip-path 0.3s ease-out;
 
-      margin-top: auto;
-    `}
+  display: grid;
+  place-items: start;
+  grid-gap: 8px;
+  grid-auto-rows: auto;
+  grid-template-areas:
+    'name name'
+    'price buttons';
+`
+
+export const StyledCardText = styled.span`
+  word-wrap: break-word;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  ${(props) => {
+    switch (props.type) {
+      case 'name':
+        return css`
+          grid-area: name;
+          font-size: 1.2rem;
+          color: ${(props) => props.theme.colors.primary};
+
+          &:hover {
+            text-decoration: underline;
+          }
+        `
+      case 'price':
+        return css`
+          justify-self: start;
+          align-self: end;
+          grid-area: price;
+          font-size: 1.1rem;
+          color: ${(props) => props.theme.colors.red1};
+        `
+      default:
+        break
+    }
+  }}
 `

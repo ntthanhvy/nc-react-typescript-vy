@@ -1,23 +1,22 @@
-export default  {
-    colors: {
-        primary: "#03254C",
-        secondary: "#D0EFFF",
-        blue1: "#1167B1",
-        blue2: "#187BCD",
-        blue3: "#2A9DF4",
-        
-        light: "#F0F8FD",
-        dark: "#707070",
-        
-        red1: "#F4592A",
-        red2: "#F4302A",
+export default {
+  colors: {
+    primary: "#74828b",
+    secondary: "#8a9599",
+    blue1: "#9cb7be",
+    blue2: "#b0c8cc",
+    blue3: "#d6e0e2",
 
-    },
+    light: "#F0F8FD",
+    dark: "#707070",
 
-    typo: {
-        bold: '700',
-        regular: '500',
-        light: '300',
-        italic: 'italic',
-    }
-}
+    red1: "#d33f0f",
+    red2: "#dd490d",
+  },
+
+  typo: {
+    bold: "700",
+    regular: "500",
+    light: "300",
+    italic: "italic",
+  },
+};

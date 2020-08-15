@@ -2,6 +2,6 @@ import { Text } from './Text'
 import { Button } from './Button'
 import { Card } from './Card'
 import Input from './Input/Input'
-import CartItem from './CartItem'
+import Form from './Form/Form'
 
-export { Text, Card, Button, Input, CartItem }
+export { Text, Card, Button, Input, Form }

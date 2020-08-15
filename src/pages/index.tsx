@@ -1,77 +1,62 @@
 import React from 'react'
 import _ from 'lodash'
-import Link from 'next/link'
 import Router from 'next/router'
-import withApollo, { cartItemsVar } from '../utils/withApollo'
+import withApollo from '../utils/withApollo'
 
 import { Layout } from '../components/Layout'
 import { MdViewList, MdViewModule, MdSearch } from 'react-icons/md'
+import { IoIosCart, IoIosEye } from 'react-icons/io'
 
 import {
   SelectView,
   SelectOpt,
   StyledProductContainer,
+  ProductContainer,
+  CusBtn,
 } from '../components/elements/ProductList/ProductList.styled'
-import { SearchInput, ProductList } from '../components/elements/ProductList'
-import Cart from '../components/elements/Cart'
+import { SearchInput } from '../components/elements/ProductList'
 
-import { Footer } from '../components/Footer'
 import { Card, Input } from '../components/ui-kits'
 
-import { useQuery } from '@apollo/react-hooks'
+import { useLazyQuery } from '@apollo/react-hooks'
 import { GET_PRODUCTS } from '../graphql/product/product.query'
-import { GET_CART_ITEMS } from '../graphql/product/cart.query'
-
-interface IProduct {
-  id: string
-  name: string
-  imgUrl: string
-  price: number
-  shortDescription: string
-}
+import { ICartItem } from '../components/elements/Cart/CartItem'
+import { IProduct } from './product/[id]'
 
 interface IHome {
   products: IProduct[]
+  cart?: ICartItem[]
+  setCart?: (item) => void
 }
 
-export const Home: React.FC<IHome> = ({ products }) => {
-  const cartItems = cartItemsVar()
-
+export const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
   const [blockView, setBlockView] = React.useState<boolean>(true)
-  const [listView, setListView] = React.useState<boolean>(false)
   const [keyword, setKeyword] = React.useState<string>('')
 
-  const { loading, error, data } = useQuery(GET_PRODUCTS, {
-    variables: {
-      input: {
-        keyword,
-        page: 1,
-      },
-    },
-  })
+  const [getProducts, { loading, error, data }] = useLazyQuery(GET_PRODUCTS)
 
-  const addToCart = (id) => {
-    // if (_.find(cart, ['id', id])) {
-    //   let prod = _.find(cart, ['productId', id])
-    //   prod.count += 1
-    //   setCart(cart)
-    // } else {
-    //   setCart([...cart, { productId: id, quantity: 1 }])
-    //   cartItemsVar(cart)
-    // }
-    console.log(_.find(cartItems, ['productId', id]))
-
-    if (_.find(cartItems, ['productId', id])) {
-      let prod = _.find(cartItems, ['productId', id])
+  const addToCart = (product) => {
+    if (cart.length && cart.find((prod) => prod.productId === product.id)) {
+      let prod = cart.find((prod) => prod.productId === product.id)
       prod.quantity += 1
 
-      cartItemsVar(cartItems)
+      setCart([...cart])
     } else {
-      const newProd = { productId: id, quantity: 1 }
-      cartItemsVar([...cartItems, newProd])
+      const newProd = {
+        price: product.price,
+        name: product.name,
+        productId: product.id,
+        quantity: 1,
+      }
+      setCart([...cart, newProd])
     }
 
-    console.log(cartItems)
+    window.localStorage.setItem('cart', JSON.stringify(cart))
+  }
+
+  const onSubmitInput = (e) => {
+    e.preventDefault()
+    getProducts({ variables: { input: { keyword, page: 1 } } })
   }
 
   const onSearchChanged = (e) => {
@@ -82,35 +67,46 @@ export const Home: React.FC<IHome> = ({ products }) => {
     products = data.getAllProduct.data
   }
 
+  React.useEffect(() => {
+    getProducts({
+      variables: {
+        input: {
+          keyword,
+          page: 1,
+        },
+      },
+    })
+
+    console.log(cart)
+    console.log(products)
+  }, [cart])
+
   return (
     <>
       <Layout>
-        <SelectView columns={2}>
-          <SelectOpt
-            onClick={() => {
-              setBlockView(true)
-              setListView(false)
-            }}
-            blockView={blockView}
-          >
-            <MdViewModule fontSize={32} />
-          </SelectOpt>
-          <SelectOpt
-            onClick={() => {
-              setBlockView(false)
-              setListView(true)
-            }}
-            listView={listView}
-          >
-            <MdViewList fontSize={32} />
-          </SelectOpt>
+        <SelectView columns={1}>
+          {blockView ? (
+            <SelectOpt
+              onClick={() => {
+                setBlockView(false)
+              }}
+              listView={!blockView}
+            >
+              <MdViewList fontSize={32} />
+            </SelectOpt>
+          ) : (
+            <SelectOpt
+              onClick={() => {
+                setBlockView(true)
+              }}
+              blockView={blockView}
+            >
+              <MdViewModule fontSize={32} />
+            </SelectOpt>
+          )}
         </SelectView>
-        <Cart />
         <StyledProductContainer>
-          <SearchInput
-            searchIcon={<MdSearch fontSize={14} />}
-            // onFinish={applySearch}
-          >
+          <SearchInput onSubmitInput={onSubmitInput} searchIcon={<MdSearch fontSize={14} />}>
             <Input
               type="text"
               placeholder="Search"
@@ -119,7 +115,8 @@ export const Home: React.FC<IHome> = ({ products }) => {
               className="search-input"
             />
           </SearchInput>
-          {/* <ProductContainer blockView={blockView} listView={listView}>
+          <ProductContainer blockView={blockView}>
+            {error && <h2>{error.message}</h2>}
             {(loading && <h2>Loading...</h2>) ||
               products?.map((data: IProduct) => (
                 <Card
@@ -127,35 +124,21 @@ export const Home: React.FC<IHome> = ({ products }) => {
                   imageURL={data.imgUrl}
                   buttonGroups={
                     <>
-                      <CusBtn onClick={() => Router.push(`/product/${data.id}`)}>View</CusBtn>
-                      <CusBtn onClick={() => addToCart(data.id)}>Add to Cart</CusBtn>
+                      <CusBtn onClick={() => Router.push(`/product/${data.id}`)}>
+                        <IoIosEye fontSize={18} />
+                      </CusBtn>
+                      <CusBtn onClick={() => addToCart(data)}>
+                        <IoIosCart fontSize={18} />
+                      </CusBtn>
                     </>
                   }
                   blockView={blockView}
-                  listView={listView}
-                  product_name={data.name}
-                >
-                  <span className="product_name" onClick={() => Router.push(`/product/${data.id}`)}>
-                    {data.name}
-                  </span>
-                  <span className="product_price">{data.price} VND</span>
-                  <span>{data.shortDescription}</span>
-                </Card>
+                  product={data}
+                />
               ))}
-          </ProductContainer> */}
-          {loading && <h2>Loading...</h2>}
-          {!loading && data && (
-            <ProductList
-              blockView={blockView}
-              listView={listView}
-              products={products}
-              addToCart={addToCart}
-              changePage={() => Router.push(`/product/${data.id}`)}
-            />
-          )}
+          </ProductContainer>
         </StyledProductContainer>
       </Layout>
-      <Footer />
     </>
   )
 }

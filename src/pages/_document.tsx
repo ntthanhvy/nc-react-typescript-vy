@@ -1,7 +1,6 @@
 import React from 'react'
 import Document, { Html, Head, Main, NextScript } from 'next/document'
 import { ServerStyleSheet } from 'styled-components'
-import withApollo from '../utils/withApollo'
 
 const globalStyles = `
 * {
@@ -44,8 +43,7 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-         
+          {/* <meta name="viewport" content="width=device-width, initial-scale=1" /> */}
 
           <style type="text/css">{globalStyles}</style>
         </Head>

@@ -9,7 +9,7 @@ interface ISearchInput {
   type?: string
   placeholder?: string
   onChange?: (e) => void
-  onFinish?: (e) => void
+  onSubmitInput?: (e) => void
   searchIconContainer?: string
   searchIcon?: React.ReactNode
   children?: React.ReactNode
@@ -23,10 +23,17 @@ interface ISearchInput {
  */
 export const SearchInput: React.FC<ISearchInput> = (props) => {
   return (
-    <StyledSearchInput className={props.containerClassName}>
+    <StyledSearchInput
+      target="_top"
+      rel="search"
+      onSubmit={props.onSubmitInput}
+      className={props.containerClassName}
+    >
       {props.children}
       {props.searchIcon && (
-        <SearchIcon className={props.searchIconContainer}>{props.searchIcon}</SearchIcon>
+        <SearchIcon onClick={props.onSubmitInput} className={props.searchIconContainer}>
+          {props.searchIcon}
+        </SearchIcon>
       )}
     </StyledSearchInput>
   )

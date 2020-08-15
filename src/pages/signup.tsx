@@ -3,14 +3,15 @@ import { useRouter } from 'next/router'
 
 import { StyledSignin, SigninBox, SigninHeader } from '../components/elements/SignIn/SignIn.styled'
 import { Form } from '../components/ui-kits'
+import StyledFormButton from '../components/ui-kits/Form/FormButton'
 
-import { SIGN_IN } from '../graphql/auth/signin.graphql'
 import { useMutation } from '@apollo/react-hooks'
 import withApollo from '../utils/withApollo'
 import { setToken, getToken } from '../utils/service'
+import { SIGN_UP } from '../graphql/auth/signup.graphql'
 
 const SignIn = () => {
-  const [signIn, { called, error, data }] = useMutation(SIGN_IN)
+  const [signUp, { called, error, data }] = useMutation(SIGN_UP)
   const [loading, setLoading] = React.useState<boolean>(false)
 
   const router = useRouter()
@@ -18,34 +19,30 @@ const SignIn = () => {
   const onSubmit = (event) => {
     event.preventDefault()
     setLoading(true)
+
     const formData = new FormData(event.target)
 
     const email = formData.get('email')
     const password = formData.get('password')
+    const fullName = formData.get('fullName')
 
-    signIn({ variables: { input: { email, password } } })
+    signUp({ variables: { input: { email, password, fullName } } })
       .then((res) => {
         setLoading(false)
         window.localStorage.clear()
-        setToken(res.data.signIn.accessToken)
-
-        formData.set('email', '')
-        formData.set('password', '')
+        setToken(res.data.signUp.token)
         router.push('/')
       })
-      .catch((error) => {
+      .catch((err) => {
         setLoading(false)
-
-        formData.set('email', '')
-        formData.set('password', '')
-        alert(error.toString())
+        alert(err.message)
       })
   }
 
   return (
     <StyledSignin>
       <SigninBox>
-        <SigninHeader>Sign In</SigninHeader>
+        <SigninHeader>Sign Up</SigninHeader>
         <Form onSubmit={onSubmit}>
           <Form.Item>
             <Form.Label>Email: </Form.Label>
@@ -67,8 +64,12 @@ const SignIn = () => {
               name="password"
             />
           </Form.Item>
-          <Form.Button type="submit" loading={loading}>
-            SIGN IN
+          <Form.Item>
+            <Form.Label>Full name: </Form.Label>
+            <Form.Input required className="form-control" placeholder="John Doe" name="fullName" />
+          </Form.Item>
+          <Form.Button type="submit" disabled={called || loading} loading={loading}>
+            SIGN UP
           </Form.Button>
         </Form>
       </SigninBox>
