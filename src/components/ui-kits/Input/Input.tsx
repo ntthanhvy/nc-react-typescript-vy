@@ -7,7 +7,6 @@ interface IInputProps {
   type?: string
   value?: string
   onChange?: (e) => void
-  onFinish?: (e) => void
 }
 
 const Input: React.FC<IInputProps> = (props) => {
@@ -16,7 +15,6 @@ const Input: React.FC<IInputProps> = (props) => {
       value={props.value}
       type={props.type}
       onChange={props.onChange}
-      onFinish={props.onFinish}
       placeholder={props.placeholder}
       className={props.className}
     />

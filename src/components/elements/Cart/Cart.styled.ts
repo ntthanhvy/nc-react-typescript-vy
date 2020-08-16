@@ -1,6 +1,6 @@
-import styled, { css } from "styled-components";
-import { Grid } from "styled-css-grid";
-import { Button } from "../../ui-kits";
+import styled, { css } from 'styled-components'
+import { Grid } from 'styled-css-grid'
+import { Button } from '../../ui-kits'
 
 export const StyledCart = styled(Grid)`
   grid-area: cart;
@@ -9,7 +9,7 @@ export const StyledCart = styled(Grid)`
   place-items: flex-start;
   grid-auto-rows: 60px;
   grid-gap: 15px;
-`;
+`
 
 export const StyledCartTitle = styled.h2`
   width: 100%;
@@ -23,21 +23,21 @@ export const StyledCartTitle = styled.h2`
 
   .remove {
     background: transparent;
-    font-size: .7rem;
+    font-size: 0.7rem;
     place-items: end;
   }
-`;
+`
 
 export const StyledCartText = styled.span`
   font-size: 1.2rem;
   font-style: italic;
   color: ${(props) => props.theme.colors.primary};
   ${(props) =>
-  props.color &&
-  css`
+    props.color &&
+    css`
       color: ${props.color};
     `}
-`;
+`
 
 export const StyledCartItem = styled(Grid)`
   grid-template-areas:
@@ -48,29 +48,29 @@ export const StyledCartItem = styled(Grid)`
   grid-gap: 6px;
   place-content: space-between;
   width: 100%;
-`;
+`
 
 export const StyledCartItemName = styled.span`
   grid-area: name;
   font-size: 1rem;
   font-weight: bold;
   color: ${(props) => props.theme.colors.primary};
-`;
+`
 export const StyledCartItemPrice = styled.span`
   grid-area: price;
   width: 60%;
-  font-size: .9rem;
+  font-size: 0.9rem;
   font-weight: bold;
   color: ${(props) => props.theme.colors.red1};
-`;
+`
 
 export const StyledCartItemQuantity = styled.span`
   grid-area: quantity;
   width: 5%;
   place-items: flex-end;
-  font-size: .9rem;
+  font-size: 0.9rem;
   color: ${(props) => props.theme.colors.primary};
-`;
+`
 
 export const RemoveCartItem = styled.button`
   grid-area: remove;
@@ -85,7 +85,7 @@ export const RemoveCartItem = styled.button`
   background: transparent;
   padding: 2px;
   cursor: pointer;
-`;
+`
 
 export const StyledCartTotal = styled.div`
   display: grid;
@@ -103,79 +103,79 @@ export const StyledCartTotal = styled.div`
   &:last-child {
     place-self: flex-end;
   }
-`;
+`
 
 export const CartBtn = styled(Button)`
-    display: grid;
-    font-size: 1.2rem;
-    font-weight: bold;
-    border-radius: 10em;
-    background: transparent;
-    place-items: center;
-    color: ${(props) => props.theme.colors.primary};
-    `;
+  display: grid;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 10em;
+  background: transparent;
+  place-items: center;
+  color: ${(props) => props.theme.colors.primary};
+`
 
 export const StyledFloatIcon = styled.div`
-    position: fixed;
-    left: 10%;
-    bottom: 50px;
-    width: 350px;
-    height: 400px;
-    overflow: hidden;
-    border-radius: .2em;
-`;
+  position: fixed;
+  left: 10%;
+  bottom: 50px;
+  width: 350px;
+  height: 400px;
+  overflow: hidden;
+  border-radius: 0.2em;
+`
 
 export const StyledFloatCartInner = styled.div`
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    place-items: flex-start;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  place-items: flex-start;
 
-    clip-path: circle(5% at 6% 95%);
-    transition: .5s ease-in-out;
-    background: ${(props) => props.theme.colors.primary};
+  clip-path: circle(5% at 6% 95%);
+  transition: 0.5s ease-in-out;
+  background: ${(props) => props.theme.colors.primary};
+
+  & svg {
+    position: absolute;
+    color: ${(props) => props.theme.colors.light};
+    bottom: 1.5%;
+    left: 2%;
+  }
+
+  &:hover {
+    clip-path: circle(75%);
+    background: ${(props) => props.theme.colors.blue3};
 
     & svg {
-      position: absolute;
-      color: ${(props) => props.theme.colors.light};
-      bottom: 1.5%;
-      left: 2%;
+      color: ${(props) => props.theme.colors.blue3};
     }
 
-    &:hover {
-      clip-path: circle(75%);
-      background: ${(props) => props.theme.colors.blue3};
-
-      & svg {
-        color: ${(props) => props.theme.colors.blue3};
-      }
-
-      &.cart {
-        height: 100%;
-      }
+    &.cart {
+      height: 100%;
     }
+  }
 
-    &:hover + .badge {
-      display: none;
-    }
-`;
+  &:hover + .badge {
+    display: none;
+  }
+`
 
 export const Badge = styled.span`
-    width: 20px;
-    height: 20px;
-    background: ${(props) => props.theme.colors.red2};
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    font-size: .8rem;
-    font-weight: bold;
-    color: ${(props) => props.theme.colors.light};
-    // clip-path: circle(50%);
-    bottom: 6%;
-    left: 8.5%;
-    z-index: 10;
-    border: 1px solid ${(props) => props.theme.colors.blue3};
-    border-radius: 50%;
-`;
+  width: 20px;
+  height: 20px;
+  background: ${(props) => props.theme.colors.red2};
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: ${(props) => props.theme.colors.light};
+  // clip-path: circle(50%);
+  bottom: 6%;
+  left: 8.5%;
+  z-index: 10;
+  border: 1px solid ${(props) => props.theme.colors.blue3};
+  border-radius: 50%;
+`

@@ -1,21 +1,20 @@
-import styled, { css } from "styled-components";
-import { Grid, Cell } from "styled-css-grid";
+import styled, { css } from 'styled-components'
+import { Grid, Cell } from 'styled-css-grid'
 
 export const StyledProductContainer = styled(Grid)`
   width: 100%;
   grid-gap: 20px;
   place-items: start;
   grid-template-columns: unset;
-  grid-template-areas: 
-  'search'
-  'products';
+  grid-template-areas:
+    'search'
+    'products';
 
   @media only screen and (min-width: 1024px) {
     grid-template: 'search products';
     grid-auto-columns: 1fr 3fr;
-
   }
-`;
+`
 
 export const StyledSearchInput = styled.form`
   grid-area: search;
@@ -34,7 +33,7 @@ export const StyledSearchInput = styled.form`
     border: none;
     height: 100%;
   }
-`;
+`
 
 export const SearchIcon = styled.div`
   place-content: center;
@@ -49,7 +48,7 @@ export const SearchIcon = styled.div`
   > svg {
     cursor: pointer;
   }
-`;
+`
 
 export const ProductContainer = styled(Grid)`
   grid-area: products;
@@ -59,30 +58,30 @@ export const ProductContainer = styled(Grid)`
   grid-auto-rows: 200px;
 
   ${(props) =>
-  props.blockView
-    ? css`
-      grid-template-columns: repeat(2, 1fr);
+    props.blockView
+      ? css`
+          grid-template-columns: repeat(2, 1fr);
 
-      @media only screen and (min-width: 768px) {
-        grid-template-columns: repeat(auto-fill, 200px);
-      }
+          @media only screen and (min-width: 768px) {
+            grid-template-columns: repeat(auto-fill, 200px);
+          }
 
-      @media only screen and (min-width: 1024px) {
-        grid-template-columns: repeat(auto-fill, 250px);
-        grid-auto-rows: 300px;
-      }
-    `
-    : css`
-    grid-template-columns: repeat(1, 1fr);
-    grid-auto-rows: 150px;
-    grid-gap: 20px;
-  `}
-`;
+          @media only screen and (min-width: 1024px) {
+            grid-template-columns: repeat(auto-fill, 250px);
+            grid-auto-rows: 300px;
+          }
+        `
+      : css`
+          grid-template-columns: repeat(1, 1fr);
+          grid-auto-rows: 150px;
+          grid-gap: 20px;
+        `}
+`
 
 export const SelectView = styled(Grid)`
   margin-left: auto;
   margin-bottom: 20px;
-`;
+`
 
 export const SelectOpt = styled(Cell)`
   width: 31px;
@@ -104,7 +103,7 @@ export const SelectOpt = styled(Cell)`
     width: 100%;
     height: 100%;
   }
-`;
+`
 
 export const CusBtn = styled.button`
   min-height: 20px;
@@ -122,8 +121,7 @@ export const CusBtn = styled.button`
 
   &:hover {
     background-color: transparent;
-    border: calc(2 / 1440 * 100vw) solid ${(props) =>
-  props.theme.colors.primary};
+    border: calc(2 / 1440 * 100vw) solid ${(props) => props.theme.colors.primary};
     color: ${(props) => props.theme.colors.primary};
   }
-`;
+`

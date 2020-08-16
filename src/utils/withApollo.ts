@@ -1,6 +1,5 @@
 import { withApollo } from "next-apollo";
-import {  ApolloClient, InMemoryCache } from "@apollo/client";
-
+import { ApolloClient, InMemoryCache } from "@apollo/client";
 
 const apolloClient = new ApolloClient({
   uri: "https://min-shop.herokuapp.com/graphql",

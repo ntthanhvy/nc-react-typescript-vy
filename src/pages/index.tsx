@@ -18,7 +18,7 @@ import { SearchInput } from '../components/elements/ProductList'
 
 import { Card, Input } from '../components/ui-kits'
 
-import { useLazyQuery } from '@apollo/react-hooks'
+import { useLazyQuery } from '@apollo/client'
 import { GET_PRODUCTS } from '../graphql/product/product.query'
 import { ICartItem } from '../components/elements/Cart/CartItem'
 import { IProduct } from './product/[id]'
@@ -78,8 +78,9 @@ export const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
     })
 
     console.log(cart)
+    console.log(data)
     console.log(products)
-  }, [cart])
+  }, [cart, data, products])
 
   return (
     <>
@@ -115,28 +116,30 @@ export const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
               className="search-input"
             />
           </SearchInput>
-          <ProductContainer blockView={blockView}>
-            {error && <h2>{error.message}</h2>}
-            {(loading && <h2>Loading...</h2>) ||
-              products?.map((data: IProduct) => (
-                <Card
-                  key={data.id}
-                  imageURL={data.imgUrl}
-                  buttonGroups={
-                    <>
-                      <CusBtn onClick={() => Router.push(`/product/${data.id}`)}>
-                        <IoIosEye fontSize={18} />
-                      </CusBtn>
-                      <CusBtn onClick={() => addToCart(data)}>
-                        <IoIosCart fontSize={18} />
-                      </CusBtn>
-                    </>
-                  }
-                  blockView={blockView}
-                  product={data}
-                />
-              ))}
-          </ProductContainer>
+
+          {(loading && <h2 data-testid="loading">Loading...</h2>) ||
+            (error && <h2 data-testid="error">{error.message}</h2>) || (
+              <ProductContainer blockView={blockView} data-testid="product-list">
+                {products?.map((data: IProduct) => (
+                  <Card
+                    key={data.id}
+                    imageURL={data.imgUrl}
+                    buttonGroups={
+                      <>
+                        <CusBtn onClick={() => Router.push(`/product/${data.id}`)}>
+                          <IoIosEye fontSize={18} />
+                        </CusBtn>
+                        <CusBtn onClick={() => addToCart(data)}>
+                          <IoIosCart fontSize={18} />
+                        </CusBtn>
+                      </>
+                    }
+                    blockView={blockView}
+                    product={data}
+                  />
+                ))}
+              </ProductContainer>
+            )}
         </StyledProductContainer>
       </Layout>
     </>

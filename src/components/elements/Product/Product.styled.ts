@@ -1,19 +1,19 @@
-import styled, { css } from "styled-components";
-import { Grid } from "styled-css-grid";
+import styled, { css } from 'styled-components'
+import { Grid } from 'styled-css-grid'
 
 export const StyledProductText = styled.span`
   ${(props) => {
-  switch (props.type) {
-    case "title":
-      return css`
+    switch (props.type) {
+      case 'title':
+        return css`
           font-size: 1.3rem;
           font-weight: bold;
-        `;
-    default:
-      return;
-  }
-}}
-`;
+        `
+      default:
+        return
+    }
+  }}
+`
 
 export const StyledProduct = styled.div`
   width: 90%;
@@ -58,18 +58,18 @@ export const StyledProduct = styled.div`
   & .details-block ul {
     margin-inline-start: 20px !important;
   }
-`;
+`
 
 export const StyledProductInfo = styled.div`
   display: grid;
   place-items: flex-start;
   grid-template-columns: 1fr;
-`;
+`
 
 export const ProductImagesHolder = styled(Grid)`
   grid-template-columns: 4fr 1fr;
   place-items: center;
-`;
+`
 
 export const ProductImages = styled(Grid)`
   width: 100%;
@@ -79,40 +79,40 @@ export const ProductImages = styled(Grid)`
   grid-template-columns: 1fr;
   overflow-y: auto;
   overflow-x: hidden;
-`;
+`
 
 export const ProductImg = styled.img`
   width: 100%;
   height: 100%;
   border: 1px solid ${(props) => props.theme.colors.secondary};
-  border-radius: .5rem;
+  border-radius: 0.5rem;
   place-items: center;
   cursor: pointer;
-  padding: .5em;
-`;
+  padding: 0.5em;
+`
 
 export const ProductDetails = styled.div`
   margin-top: 20px;
   display: grid;
   place-items: start;
   grid-gap: 20px;
-`;
+`
 
 export const ProductName = styled.span`
-  font-size: 1.8rem;;
+  font-size: 1.8rem;
   color: ${(props) => props.theme.colors.primary};
-`;
+`
 
 export const ProductPrice = styled.span`
   font-size: 1.5rem;
   font-weight: 700;
   color: ${(props) => props.theme.colors.red1};
-`;
+`
 
 export const ProductShortDesc = styled.p`
   min-height: 3rem;
   font-size: 1.2rem;
-`;
+`
 
 export const BackBtn = styled.button`
   background: transparent;

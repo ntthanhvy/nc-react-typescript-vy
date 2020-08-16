@@ -1,15 +1,12 @@
-import { gql } from "apollo-boost";
+import { gql } from "@apollo/client";
 
 export const GET_PRODUCTS = gql`
   query getAllProduct($input: GetAllProductInput!) {
     getAllProduct(input: $input) {
       data {
         id
-        sku
         name
         price
-        finalPrice
-        promotionPercent
         namePath
         imgUrl
       }
