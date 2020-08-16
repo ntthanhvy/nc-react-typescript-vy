@@ -10,6 +10,8 @@ import {
   getByTestId,
   findByTestId,
   getByPlaceholderText,
+  within,
+  fireEvent,
 } from '../utils/test-util'
 
 import '@testing-library/jest-dom'
@@ -18,6 +20,8 @@ import { MockedProvider } from '@apollo/client/testing'
 import { GET_PRODUCTS } from '../graphql/product/product.query'
 
 import Home from '../pages'
+
+jest.mock('next/router')
 
 const mocks = [
   {
@@ -99,9 +103,10 @@ describe('Test Home Page', () => {
   })
 
   it('should render with mocks data', async () => {
+    const { useRouter } = require('next/router')
     const { findByTestId, getByTestId, getByPlaceholderText } = await render(
       <MockedProvider mocks={mocks} addTypename={false}>
-        <Home cart={cart} setCart={setCart} />
+        <Home cart={cart} setCart={setCart} router={() => useRouter()} />
       </MockedProvider>
     )
 
@@ -111,32 +116,39 @@ describe('Test Home Page', () => {
 
     expect(productList.childNodes).toHaveLength(4)
     expect(getByPlaceholderText('Search')).toBeInTheDocument()
+
+    const item = productList.children[0] as HTMLElement
+    console.log(item)
+
+    const buttons = within(item).queryAllByRole('button')
+    console.log(buttons)
+
+    fireEvent(buttons[0], new Event('click'))
+    expect(screen.getByText('product-1')).toBeInTheDocument()
   })
 
-  it('Should add to cart', async () => {
-    const mock = {
-      request: { query: GET_PRODUCTS, variables: { input: { keyword: '', page: 1 } } },
-      result: {
-        data: {
-          getAllProduct: {
-            data: [{ id: '1', name: 'product-1', price: 10000 }],
-          },
-        },
-      },
-    }
+  // it('Should add to cart', async () => {
+  //   const mock = {
+  //     request: { query: GET_PRODUCTS, variables: { input: { keyword: '', page: 1 } } },
+  //     result: {
+  //       data: {
+  //         getAllProduct: {
+  //           data: [{ id: '1', name: 'product-1', price: 10000 }],
+  //         },
+  //       },
+  //     },
+  //   }
 
-    const { getByTestId, findByTestId } = await render(
-      <MockedProvider mocks={[mock]} addTypename={false}>
-        <Home cart={cart} setCart={setCart} />
-      </MockedProvider>
-    )
+  //   const { getByTestId, findByTestId } = await render(
+  //     <MockedProvider mocks={[mock]} addTypename={false}>
+  //       <Home cart={cart} setCart={setCart} />
+  //     </MockedProvider>
+  //   )
 
-    await waitFor(() => expect(getByTestId('product-list').children).toBeDefined())
+  //   await waitFor(() => expect(getByTestId('product-list').children).toBeDefined())
 
-    const productList = await findByTestId('product-list')
-    const item = productList.firstElementChild
-    console.log(productList.children)
+  //   const productList = await findByTestId('product-list')
 
-    console.log(item.getElementsByTagName('button'))
-  })
+  //   expect(productList.childNodes).toHaveLength(1)
+  // })
 })

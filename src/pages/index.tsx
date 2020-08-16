@@ -76,10 +76,6 @@ export const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
         },
       },
     })
-
-    console.log(cart)
-    console.log(data)
-    console.log(products)
   }, [cart, data, products])
 
   return (
