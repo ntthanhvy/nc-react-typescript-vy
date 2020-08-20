@@ -35,7 +35,7 @@ export const Home: React.FC<IHome> = ({ products, cart, setCart }) => {
 
   const [getProducts, { loading, error, data }] = useLazyQuery(GET_PRODUCTS)
 
-  const addToCart = (product) => {
+  const addToCart = (product: IProduct) => {
     if (cart.length && cart.find((prod) => prod.productId === product.id)) {
       let prod = cart.find((prod) => prod.productId === product.id)
       prod.quantity += 1
